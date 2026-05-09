@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "project_name": "agent-kit",
+  "memory_files": [
+    ".agent/memory/index.md",
+    ".agent/memory/decisions.md",
+    ".agent/memory/workflows.md",
+    ".agent/memory/pitfalls.md",
+    ".agent/memory/glossary.md"
+  ],
+  "memory_snapshot_max_bytes": 40000,
+  "generated": {
+    "codex_agents": "AGENTS.md",
+    "claude_memory": "CLAUDE.md",
+    "cursor_rule": ".cursor/rules/agent-memory.mdc",
+    "claude_mcp": ".mcp.json",
+    "cursor_mcp": ".cursor/mcp.json",
+    "codex_mcp": ".codex/config.toml"
+  }
+}

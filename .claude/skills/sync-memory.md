@@ -9,9 +9,9 @@ Use this skill to commit and push the latest agent memory and tool changes to Gi
 
 ## Steps
 
-1. Run `python3 agentmem.py sync` in the project root
+1. Run `python3 elephagent.py sync` in the project root
 2. Report what was committed and whether the push succeeded
-3. If `--no-push` is needed (e.g. no remote configured), run `python3 agentmem.py sync --no-push` instead
+3. If `--no-push` is needed (e.g. no remote configured), run `python3 elephagent.py sync --no-push` instead
 
 ## Notes
 

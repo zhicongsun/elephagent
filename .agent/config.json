@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "project_name": "agentmem",
+  "project_name": "elephagent",
   "memory_files": [
     ".agent/memory/index.md",
     ".agent/memory/decisions.md",

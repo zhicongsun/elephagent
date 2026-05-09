@@ -1,3 +1,8 @@
+---
+name: sync-memory
+description: Sync Memory
+---
+
 # Sync Memory
 
 Use this skill to commit and push the latest agent memory and tool changes to Git so teammates and other AI tools see the updates.

@@ -11,7 +11,7 @@ Use this skill to save valuable information from the current conversation to sha
 
 1. Identify the topic: `decisions`, `workflows`, `pitfalls`, `glossary`, or `log` (default)
 2. Call MCP tool `agent_memory_append` with the note and topic
-3. Run `python3 agentmem.py build` so all platform adapters are updated
+3. Run `python3 elephagent.py build` so all platform adapters are updated
 4. Confirm to the user what was saved and where
 
 ## Topic guide

@@ -1,3 +1,8 @@
+---
+name: remember
+description: Remember
+---
+
 # Remember
 
 Use this skill to save valuable information from the current conversation to shared agent memory.

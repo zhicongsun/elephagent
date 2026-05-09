@@ -9,7 +9,7 @@ Use this skill to check the health of the shared agent memory system.
 
 ## Steps
 
-1. Run `python3 agentmem.py doctor` in the project root
+1. Run `python3 elephagent.py doctor` in the project root
 2. Read the output and summarize:
    - Which checks passed (`[ok]`)
    - Which checks warned (`[warn]`) — explain what the warning means and how to fix it

@@ -3,9 +3,9 @@ requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "agentmem"
+name = "elephagent"
 version = "0.1.0"
-description = "One memory layer for all your AI coding agents"
+description = "Shared memory layer for all your AI coding agents — elephants never forget"
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.9"
@@ -20,12 +20,12 @@ classifiers = [
 ]
 
 [project.scripts]
-agentmem = "agentmem:main"
+elephagent = "elephagent:main"
 
 [project.urls]
-Homepage = "https://github.com/zhicongsun/agentmem"
-Repository = "https://github.com/zhicongsun/agentmem"
-Issues = "https://github.com/zhicongsun/agentmem/issues"
+Homepage = "https://github.com/zhicongsun/elephagent"
+Repository = "https://github.com/zhicongsun/elephagent"
+Issues = "https://github.com/zhicongsun/elephagent/issues"
 
 [tool.setuptools]
-py-modules = ["agentmem"]
+py-modules = ["elephagent"]

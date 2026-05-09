@@ -9,7 +9,7 @@ Use this skill to initialize the shared agent memory system in the current proje
 
 ## Steps
 
-1. Run `python3 agentmem.py init` in the project root
+1. Run `python3 elephagent.py init` in the project root
 2. Report which files were created
 3. Remind the user to commit `.agent/`, `CLAUDE.md`, `AGENTS.md`, and `.cursor/` to Git so teammates can share the memory
 

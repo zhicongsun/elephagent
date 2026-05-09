@@ -1,8 +1,8 @@
-# agentmem
+# elephagent
 
 > One memory layer for all your AI coding agents.
 
-[![PyPI](https://img.shields.io/pypi/v/agentmem.svg)](https://pypi.org/project/agentmem/)
+[![PyPI](https://img.shields.io/pypi/v/elephagent.svg)](https://pypi.org/project/elephagent/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
 [![No dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg)]()
@@ -17,7 +17,7 @@ You use Claude Code, Cursor, and Codex. Each stores project knowledge in a diffe
 
 ## How It Works
 
-`agentmem` stores everything in one Git-synced `.agent/` directory and renders the config files each tool already knows how to read. Your AI agents can also read and write memory directly via a built-in MCP server.
+`elephagent` stores everything in one Git-synced `.agent/` directory and renders the config files each tool already knows how to read. Your AI agents can also read and write memory directly via a built-in MCP server.
 
 ```mermaid
 flowchart LR
@@ -26,10 +26,10 @@ flowchart LR
         src[".agent/\n─────────────\nmemory/\n  decisions.md\n  workflows.md\n  pitfalls.md\ntools/\n  registry.json"]
     end
 
-    src -->|"agentmem build"| CLAUDE["CLAUDE.md\n(Claude Code)"]
-    src -->|"agentmem build"| AGENTS["AGENTS.md\n(Codex)"]
-    src -->|"agentmem build"| CURSOR[".cursor/rules/\n(Cursor)"]
-    src -->|"agentmem build"| MCP[".mcp.json\n(all clients)"]
+    src -->|"elephagent build"| CLAUDE["CLAUDE.md\n(Claude Code)"]
+    src -->|"elephagent build"| AGENTS["AGENTS.md\n(Codex)"]
+    src -->|"elephagent build"| CURSOR[".cursor/rules/\n(Cursor)"]
+    src -->|"elephagent build"| MCP[".mcp.json\n(all clients)"]
 
     CLAUDE --> cc["Claude Code"]
     AGENTS --> codex["Codex"]
@@ -48,13 +48,13 @@ flowchart LR
 ## Installation
 
 ```bash
-pip install agentmem
+pip install elephagent
 ```
 
 Or with pipx (recommended for global CLI tools):
 
 ```bash
-pipx install agentmem
+pipx install elephagent
 ```
 
 ---
@@ -79,26 +79,26 @@ If you use **Claude Code** or **Cursor**, you don't need to type any commands. J
 
 ```bash
 # Initialize in your project
-agentmem init
+elephagent init
 
 # Add a memory note
-agentmem remember "This repo uses pnpm. Redis is required for API tests."
+elephagent remember "This repo uses pnpm. Redis is required for API tests."
 
 # Rebuild all adapter files
-agentmem build
+elephagent build
 
 # Verify the setup
-agentmem doctor
+elephagent doctor
 
 # Commit and push memory to Git
-agentmem sync -m "update memory"
+elephagent sync -m "update memory"
 ```
 
 ---
 
 ## Built-in Skills
 
-agentmem ships five skills that work across Claude Code, Cursor, and Codex — no commands needed.
+elephagent ships five skills that work across Claude Code, Cursor, and Codex — no commands needed.
 
 | Skill | Trigger phrases | What it does |
 |---|---|---|
@@ -114,22 +114,22 @@ agentmem ships five skills that work across Claude Code, Cursor, and Codex — n
 
 | Command | Description |
 |---|---|
-| `agentmem.py init` | Bootstrap `.agent/` and generate all platform files |
-| `agentmem.py remember "..."` | Append a note and rebuild |
-| `agentmem.py build` | Regenerate all adapter files from `.agent/` |
-| `agentmem.py doctor` | Check that everything is in sync |
-| `agentmem.py sync -m "msg"` | Build → pull → commit → push |
-| `agentmem.py tool list` | List registered MCP servers |
-| `agentmem.py tool add <name>` | Register a new MCP server |
+| `elephagent.py init` | Bootstrap `.agent/` and generate all platform files |
+| `elephagent.py remember "..."` | Append a note and rebuild |
+| `elephagent.py build` | Regenerate all adapter files from `.agent/` |
+| `elephagent.py doctor` | Check that everything is in sync |
+| `elephagent.py sync -m "msg"` | Build → pull → commit → push |
+| `elephagent.py tool list` | List registered MCP servers |
+| `elephagent.py tool add <name>` | Register a new MCP server |
 
 ### Adding MCP tools
 
 ```bash
 # stdio server
-python3 agentmem.py tool add context7 --command npx --arg -y --arg @upstash/context7-mcp
+python3 elephagent.py tool add context7 --command npx --arg -y --arg @upstash/context7-mcp
 
 # HTTP server with token from env
-python3 agentmem.py tool add figma \
+python3 elephagent.py tool add figma \
   --url https://mcp.figma.com/mcp \
   --bearer-token-env-var FIGMA_OAUTH_TOKEN
 ```
@@ -138,7 +138,7 @@ python3 agentmem.py tool add figma \
 
 ## Built-in MCP Server
 
-`agentmem` ships a small MCP server at `.agent/tools/mcp_server.py` that lets agents read and write shared memory directly through the MCP protocol.
+`elephagent` ships a small MCP server at `.agent/tools/mcp_server.py` that lets agents read and write shared memory directly through the MCP protocol.
 
 | Tool | Description |
 |---|---|
@@ -163,7 +163,7 @@ python3 agentmem.py tool add figma \
 Never commit secrets into `.agent/`. Use environment variable references instead:
 
 ```bash
-python3 agentmem.py tool add internal-api \
+python3 elephagent.py tool add internal-api \
   --url https://example.com/mcp \
   --bearer-token-env-var INTERNAL_API_TOKEN
 ```
@@ -179,7 +179,7 @@ python3 agentmem.py tool add internal-api \
 - [x] Built-in MCP server
 - [x] Shared MCP tool registry
 - [x] Built-in skills for Claude Code, Cursor, Codex
-- [ ] Python SDK (`import agentmem`)
+- [ ] Python SDK (`import elephagent`)
 - [ ] Importers for existing Claude / Cursor / Codex memories
 - [ ] Memory compaction for large histories
 - [ ] `pipx` / Homebrew packaging
@@ -192,11 +192,11 @@ python3 agentmem.py tool add internal-api \
 Issues and PRs are welcome. Before submitting, run:
 
 ```bash
-python3 agentmem.py build
-python3 agentmem.py doctor
+python3 elephagent.py build
+python3 elephagent.py doctor
 python3 - <<'PY'
 from pathlib import Path
-for path in ["agentmem.py", ".agent/tools/mcp_server.py"]:
+for path in ["elephagent.py", ".agent/tools/mcp_server.py"]:
     compile(Path(path).read_text(), path, "exec")
     print(path, "ok")
 PY

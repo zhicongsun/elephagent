@@ -56,7 +56,7 @@ Use this skill to save valuable information from the current conversation to sha
 
 1. Identify the topic: `decisions`, `workflows`, `pitfalls`, `glossary`, or `log` (default)
 2. Call MCP tool `agent_memory_append` with the note and topic
-3. Run `python3 agentmem.py build` so all platform adapters are updated
+3. Run `agentmem build` so all platform adapters are updated
 4. Confirm to the user what was saved and where
 
 ## Topic guide
@@ -69,6 +69,111 @@ Use this skill to save valuable information from the current conversation to sha
 | glossary | Project-specific terms |
 | log | General observations (default) |
 """
+
+DEFAULT_INIT_MEMORY_SKILL = """\
+# Init Memory
+
+Use this skill to initialize the shared agent memory system in the current project.
+
+## When to invoke
+
+- The user says "initialize memory sharing", "set up agent memory", "init memory", or similar
+- The `.agent/` directory does not exist yet in the project
+
+## Steps
+
+1. Run `agentmem init` in the project root
+2. Report which files were created
+3. Remind the user to commit `.agent/`, `CLAUDE.md`, `AGENTS.md`, and `.cursor/` to Git so teammates can share the memory
+
+## Notes
+
+- Safe to run multiple times; existing files are not overwritten unless `--force` is passed
+- If `.agent/` already exists, tell the user and skip
+"""
+
+DEFAULT_CHECK_MEMORY_SKILL = """\
+# Check Memory
+
+Use this skill to check the health of the shared agent memory system.
+
+## When to invoke
+
+- The user says "check memory", "memory status", "check memory setup", "doctor", or similar
+- Something seems wrong with memory loading or generated files are missing
+
+## Steps
+
+1. Run `agentmem doctor` in the project root
+2. Read the output and summarize:
+   - Which checks passed (`[ok]`)
+   - Which checks warned (`[warn]`) — explain what the warning means and how to fix it
+   - Which checks failed (`[fail]`) — tell the user exactly what to do
+3. If everything is OK, confirm the setup is healthy
+
+## Notes
+
+- `[warn]` items are non-blocking but worth fixing (e.g. missing Git remote, potential secret in env)
+- `[fail]` items mean something is broken and must be resolved before memory syncing works
+"""
+
+DEFAULT_SYNC_MEMORY_SKILL = """\
+# Sync Memory
+
+Use this skill to commit and push the latest agent memory and tool changes to Git.
+
+## When to invoke
+
+- The user says "sync memory", "push memory", "share memory with team", or similar
+- After a session where new memories were added and the user wants to persist them
+
+## Steps
+
+1. Run `agentmem sync` in the project root
+2. Report what was committed and whether the push succeeded
+3. If `--no-push` is needed (e.g. no remote configured), run `agentmem sync --no-push` instead
+
+## Notes
+
+- `sync` runs `build` first, then `git add`, `git pull --rebase`, `git commit`, and `git push`
+- If there is nothing new to commit, the command exits cleanly with a message
+- Merge conflicts in `.agent/memory/` files must be resolved manually before retrying
+"""
+
+DEFAULT_ADD_SKILL_SKILL = """\
+# Add Skill
+
+Use this skill to create a new shared agent skill available across Claude Code, Cursor, and Codex.
+
+## When to invoke
+
+- The user says "add skill <name>", "create skill <name>", "new skill <name>", or similar
+
+## Steps
+
+1. Extract the skill name from the user's message (lowercase, hyphens for spaces)
+2. Run `agentmem skill add <name>` in the project root
+3. Open `.agent/skills/<name>.md` and help the user fill in:
+   - **When to invoke**: what phrases or situations trigger this skill
+   - **Steps**: the exact actions the AI should take
+   - **Notes**: edge cases or caveats
+4. Run `agentmem build` to generate platform files
+5. Tell the user the skill is now available as `/<name>` in Claude Code
+
+## Notes
+
+- The skill name becomes the slash command in Claude Code (e.g. `add-skill` → `/add-skill`)
+- Use `--force` to overwrite an existing skill: `agentmem skill add <name> --force`
+- After editing, always run `build` to keep Cursor and Codex in sync
+"""
+
+DEFAULT_SKILLS: dict[str, str] = {
+    "init-memory": DEFAULT_INIT_MEMORY_SKILL,
+    "remember": DEFAULT_REMEMBER_SKILL,
+    "check-memory": DEFAULT_CHECK_MEMORY_SKILL,
+    "sync-memory": DEFAULT_SYNC_MEMORY_SKILL,
+    "add-skill": DEFAULT_ADD_SKILL_SKILL,
+}
 
 DEFAULT_MCP_SERVER = {
     "type": "stdio",
@@ -185,7 +290,7 @@ def append_memory(note: str, topic: str = "log") -> str:
         path.write_text(f"# {path.stem}\n\n", encoding="utf-8")
     with path.open("a", encoding="utf-8") as handle:
         handle.write(f"- {note.strip()}\n")
-    return f"Appended to {rel(path)}. Run `python3 agentmem.py build` to refresh generated adapter files."
+    return f"Appended to {rel(path)}. Run `agentmem build` to refresh generated adapter files."
 
 
 def read_registry() -> str:
@@ -441,7 +546,7 @@ This directory is the platform-neutral source of truth for coding agents working
 
 - Read this file first when starting work in the repository.
 - Search the rest of `.agent/memory/` when architecture, workflows, decisions, pitfalls, or terminology matter.
-- Add durable notes with `python3 agentmem.py remember "..."`.
+- Add durable notes with `agentmem remember "..."`.
 - Do not store secrets, tokens, credentials, or private machine paths in shared memory.
 
 ## Current Project Notes
@@ -459,8 +564,8 @@ Record repeatable project workflows here.
 
 ## Agent Memory Workflow
 
-1. Edit `.agent/memory/*.md` or run `python3 agentmem.py remember "..."`.
-2. Run `python3 agentmem.py build`.
+1. Edit `.agent/memory/*.md` or run `agentmem remember "..."`.
+2. Run `agentmem build`.
 3. Commit `.agent/` and the generated adapter files.
 """,
         ".agent/memory/pitfalls.md": """# Pitfalls
@@ -505,6 +610,13 @@ def init_command(args: argparse.Namespace) -> int:
         created.append(".gitattributes")
     created.extend(create_default_memory(root, force=args.force))
 
+    skills_dir = root / SKILLS_DIR
+    skills_dir.mkdir(parents=True, exist_ok=True)
+    for skill_name, skill_content in DEFAULT_SKILLS.items():
+        skill_path = skills_dir / f"{skill_name}.md"
+        if write_if_missing(skill_path, skill_content, args.force):
+            created.append(f"{SKILLS_DIR}/{skill_name}.md")
+
     if not args.no_build:
         build_command(args)
 
@@ -536,11 +648,12 @@ def memory_snapshot(root: Path, config: dict[str, Any]) -> str:
 
 
 def generated_notice() -> str:
-    return "> Generated by `python3 agentmem.py build`. Edit `.agent/` instead of this file."
+    return "> Generated by `agentmem build`. Edit `.agent/` instead of this file."
 
 
-def render_claude_skill(content: str) -> str:
-    return content
+def render_claude_skill(skill_name: str, content: str) -> str:
+    first_line = content.splitlines()[0].lstrip("# ").strip() if content.strip() else skill_name
+    return f"---\nname: {skill_name}\ndescription: {first_line}\n---\n\n{content}"
 
 
 def render_cursor_skill(skill_name: str, content: str) -> str:
@@ -589,7 +702,7 @@ When working here:
 - Use MCP tools generated from `.agent/tools/registry.json` when your client supports MCP.
 - Treat `.agent/` as version-controlled shared context.
 - Do not store secrets, tokens, credentials, or private machine paths in `.agent/`.
-- Add durable discoveries with `python3 agentmem.py remember "..."`, then run `python3 agentmem.py build`.
+- Add durable discoveries with `agentmem remember "..."`, then run `agentmem build`.
 {skills_block}
 ## Memory Snapshot
 
@@ -609,7 +722,7 @@ Follow these rules:
 
 - Read the imported memory files before making durable project assumptions.
 - Use `.mcp.json` for project-scoped MCP tools.
-- Add lasting notes with `python3 agentmem.py remember "..."`, then run `python3 agentmem.py build`.
+- Add lasting notes with `agentmem remember "..."`, then run `agentmem build`.
 - Never write secrets into `.agent/`.
 
 ## Imported Shared Memory
@@ -634,7 +747,7 @@ This repository stores platform-neutral agent memory and tool definitions under 
 - Read `.agent/memory/index.md` before making changes.
 - Search `.agent/memory/` for decisions, workflows, pitfalls, and project terminology.
 - Use `.cursor/mcp.json` for project-scoped MCP tools.
-- Add durable discoveries with `python3 agentmem.py remember "..."`, then run `python3 agentmem.py build`.
+- Add durable discoveries with `agentmem remember "..."`, then run `agentmem build`.
 - Never write secrets into `.agent/`.
 
 ## Memory Snapshot
@@ -695,7 +808,7 @@ def toml_array(values: list[str]) -> str:
 
 def render_codex_toml(registry: dict[str, Any]) -> str:
     lines = [
-        "# Generated by `python3 agentmem.py build`. Edit `.agent/tools/registry.json` instead.",
+        "# Generated by `agentmem build`. Edit `.agent/tools/registry.json` instead.",
         "",
     ]
     for name, server in registry.get("mcpServers", {}).items():
@@ -730,7 +843,7 @@ def render_codex_toml(registry: dict[str, Any]) -> str:
 def build_command(args: argparse.Namespace) -> int:
     root = find_root()
     if not (root / ".agent").exists():
-        print("No .agent directory found. Run `python3 agentmem.py init` first.", file=sys.stderr)
+        print("No .agent directory found. Run `agentmem init` first.", file=sys.stderr)
         return 1
 
     config = load_config(root)
@@ -762,11 +875,11 @@ def build_command(args: argparse.Namespace) -> int:
         for skill_file in sorted(skills_dir.glob("*.md")):
             skill_name = skill_file.stem
             content = skill_file.read_text(encoding="utf-8")
-            claude_path = root / CLAUDE_SKILLS_DIR / skill_file.name
+            claude_path = root / CLAUDE_SKILLS_DIR / skill_name / "SKILL.md"
             cursor_path = root / CURSOR_SKILLS_DIR / f"{skill_name}.mdc"
-            write_text(claude_path, render_claude_skill(content))
+            write_text(claude_path, render_claude_skill(skill_name, content))
             write_text(cursor_path, render_cursor_skill(skill_name, content))
-            skill_outputs.append(f"{CLAUDE_SKILLS_DIR}/{skill_file.name}")
+            skill_outputs.append(f"{CLAUDE_SKILLS_DIR}/{skill_name}/SKILL.md")
             skill_outputs.append(f"{CURSOR_SKILLS_DIR}/{skill_name}.mdc")
 
     print("Generated adapter files:")
@@ -900,18 +1013,22 @@ def sync_command(args: argparse.Namespace) -> int:
         ".mcp.json",
     ]
 
-    commands = [
-        ["git", "pull", "--rebase"],
-        ["git", "add", *tracked],
-        ["git", "diff", "--cached", "--quiet"],
-    ]
+    has_upstream = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"],
+        cwd=root,
+        capture_output=True,
+    ).returncode == 0
 
-    for command in commands[:2]:
-        result = subprocess.run(command, cwd=root)
+    if has_upstream:
+        result = subprocess.run(["git", "pull", "--rebase"], cwd=root)
         if result.returncode != 0:
             return result.returncode
 
-    diff = subprocess.run(commands[2], cwd=root)
+    result = subprocess.run(["git", "add", *tracked], cwd=root)
+    if result.returncode != 0:
+        return result.returncode
+
+    diff = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=root)
     if diff.returncode == 0:
         print("No agent memory or tool changes to commit.")
     else:
@@ -973,7 +1090,7 @@ def doctor_command(args: argparse.Namespace) -> int:
         if path.exists():
             ok(f"{path_name} exists")
         else:
-            warn(f"{path_name} is missing; run `python3 agentmem.py build`")
+            warn(f"{path_name} is missing; run `agentmem build`")
 
     registry = load_registry(root)
     for name, server in registry.get("mcpServers", {}).items():

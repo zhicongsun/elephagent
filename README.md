@@ -44,6 +44,20 @@ flowchart LR
 
 ---
 
+## Installation
+
+```bash
+pip install agentmem
+```
+
+Or with pipx (recommended for global CLI tools):
+
+```bash
+pipx install agentmem
+```
+
+---
+
 ## Quick Start
 
 ### Option A — Just talk to your AI agent (recommended)
@@ -53,30 +67,30 @@ If you use **Claude Code** or **Cursor**, you don't need to type any commands. J
 | What you say | What happens |
 |---|---|
 | `init memory` | Sets up `.agent/` and generates all platform files |
-| `remember this` / `记下来` | Saves the current conversation to shared memory |
+| `/remember <note>` | Saves a note to shared memory (use the slash command) |
 | `sync memory` | Commits and pushes memory to Git |
 | `check memory` | Runs a health check on the setup |
 | `add skill <name>` | Creates a new shared skill |
 
-> Claude Code users can also type `/init-memory`, `/remember`, `/sync-memory`, `/check-memory`, `/add-skill` directly.
+> **Note:** Use `/remember` as a slash command rather than natural language — phrases like "remember this" may be intercepted by the AI agent's built-in memory system.
 
 ### Option B — CLI
 
 ```bash
 # Initialize in your project
-python3 agentmem.py init
+agentmem init
 
 # Add a memory note
-python3 agentmem.py remember "This repo uses pnpm. Redis is required for API tests."
+agentmem remember "This repo uses pnpm. Redis is required for API tests."
 
 # Rebuild all adapter files
-python3 agentmem.py build
+agentmem build
 
 # Verify the setup
-python3 agentmem.py doctor
+agentmem doctor
 
 # Commit and push memory to Git
-python3 agentmem.py sync -m "update memory"
+agentmem sync -m "update memory"
 ```
 
 ---
@@ -88,7 +102,7 @@ agentmem ships five skills that work across Claude Code, Cursor, and Codex — n
 | Skill | Trigger phrases | What it does |
 |---|---|---|
 | `/init-memory` | "init memory", "set up agent memory" | Bootstrap `.agent/` and generate platform files |
-| `/remember` | "remember this", "save this", "记下来" | Save a note from the conversation to shared memory |
+| `/remember` | `/remember <note>` (slash command) | Save a note from the conversation to shared memory |
 | `/check-memory` | "check memory", "memory status", "doctor" | Health-check the memory setup |
 | `/sync-memory` | "sync memory", "push memory" | Build → commit → push to Git |
 | `/add-skill` | "add skill \<name\>" | Create a new shared skill |

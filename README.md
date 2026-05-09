@@ -196,4 +196,4 @@ PY
 
 ## License
 
-Choose a license before publishing this repository publicly. MIT or Apache-2.0 are common choices for developer tooling.
+MIT License

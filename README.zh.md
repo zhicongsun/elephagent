@@ -14,46 +14,88 @@
 
 你同时使用 Claude Code、Cursor、Codex。每个工具把项目记忆存在不同地方。换台机器、换个队友、接入新的 AI 工具——又要从头再来。
 
-## 解决方案
+## 工作原理
 
-`agentmem` 把所有记忆存在一个 Git 同步的 `.agent/` 目录里，自动生成每个工具能读懂的配置文件。
+`agentmem` 把所有记忆存在一个 Git 同步的 `.agent/` 目录里，自动生成每个工具能读懂的配置文件。AI 助手还可以通过内置 MCP 服务直接读写记忆。
 
-```
-.agent/                        →   CLAUDE.md          (Claude Code)
-  memory/                      →   AGENTS.md           (Codex)
-    index.md                   →   .cursor/rules/      (Cursor)
-    decisions.md               →   .mcp.json           (所有 MCP 客户端)
-    workflows.md               →   .codex/config.toml
-    pitfalls.md
-    glossary.md
-  tools/
-    registry.json
-    mcp_server.py
+```mermaid
+flowchart LR
+    subgraph repo["你的仓库"]
+        direction TB
+        src[".agent/\n─────────────\nmemory/\n  decisions.md\n  workflows.md\n  pitfalls.md\ntools/\n  registry.json"]
+    end
+
+    src -->|"agentmem build"| CLAUDE["CLAUDE.md\n(Claude Code)"]
+    src -->|"agentmem build"| AGENTS["AGENTS.md\n(Codex)"]
+    src -->|"agentmem build"| CURSOR[".cursor/rules/\n(Cursor)"]
+    src -->|"agentmem build"| MCP[".mcp.json\n(所有客户端)"]
+
+    CLAUDE --> cc["Claude Code"]
+    AGENTS --> codex["Codex"]
+    CURSOR --> cursor["Cursor"]
+    MCP --> cc
+    MCP --> codex
+    MCP --> cursor
+
+    cc -->|"/remember"| src
+    cursor -->|"/remember"| src
+    codex -->|"/remember"| src
 ```
 
 ---
 
 ## 快速开始
 
+### 方式 A — 直接跟 AI 说话（推荐）
+
+使用 **Claude Code** 或 **Cursor** 时，不需要敲任何命令，直接说：
+
+| 你说什么 | 发生什么 |
+|---|---|
+| `init memory` | 初始化 `.agent/` 并生成所有平台文件 |
+| `记下来` / `remember this` | 把当前对话内容保存到共享记忆 |
+| `sync memory` | 提交并推送记忆到 Git |
+| `check memory` | 检查记忆系统健康状态 |
+| `add skill <名字>` | 创建一个新的共享 skill |
+
+> Claude Code 用户也可以直接输入 `/init-memory`、`/remember`、`/sync-memory`、`/check-memory`、`/add-skill`。
+
+### 方式 B — 命令行
+
 ```bash
-# 1. 在项目中初始化
+# 在项目中初始化
 python3 agentmem.py init
 
-# 2. 记录一条记忆
+# 记录一条记忆
 python3 agentmem.py remember "这个项目用 pnpm，API 测试需要 Redis。"
 
-# 3. 重新生成适配文件
+# 重新生成所有适配文件
 python3 agentmem.py build
 
-# 4. 检查配置是否正确
+# 检查配置是否正确
 python3 agentmem.py doctor
-```
 
-之后，所有打开这个仓库的 AI 助手都会共享同一份记忆。
+# 提交并推送记忆到 Git
+python3 agentmem.py sync -m "更新记忆"
+```
 
 ---
 
-## 命令
+## 内置 Skills
+
+agentmem 内置了五个 skill，在 Claude Code、Cursor、Codex 中均可使用，无需输入命令。
+
+| Skill | 触发短语 | 功能 |
+|---|---|---|
+| `/init-memory` | "init memory"、"set up agent memory" | 初始化 `.agent/` 并生成平台文件 |
+| `/remember` | "记下来"、"remember this"、"save this" | 把对话内容保存到共享记忆 |
+| `/check-memory` | "check memory"、"memory status"、"doctor" | 检查记忆系统健康状态 |
+| `/sync-memory` | "sync memory"、"push memory" | 构建 → 提交 → 推送到 Git |
+| `/add-skill` | "add skill \<名字\>" | 创建新的共享 skill |
+
+---
+
+## 完整命令列表
 
 | 命令 | 说明 |
 |---|---|
@@ -121,6 +163,7 @@ python3 agentmem.py tool add internal-api \
 - [x] 自动生成 Claude Code、Cursor、Codex 适配文件
 - [x] 内置 MCP 服务
 - [x] 共享 MCP 工具注册表
+- [x] 内置 Skills（Claude Code、Cursor、Codex）
 - [ ] Python SDK（`import agentmem`）
 - [ ] 导入已有的 Claude / Cursor / Codex 记忆
 - [ ] 大历史记忆压缩

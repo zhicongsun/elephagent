@@ -2,6 +2,7 @@
 
 > 一个目录，同步所有 AI 编程助手的记忆。
 
+[![PyPI](https://img.shields.io/pypi/v/agentmem.svg)](https://pypi.org/project/agentmem/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
 [![No dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg)]()

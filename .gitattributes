@@ -1,0 +1,3 @@
+# Append-only memory files: keep all lines from both sides on conflict.
+.agent/memory/*.md merge=union
+.agent/memory/log/*.md merge=union

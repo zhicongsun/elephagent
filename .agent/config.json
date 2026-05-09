@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "project_name": "agent-kit",
+  "project_name": "agentmem",
   "memory_files": [
     ".agent/memory/index.md",
     ".agent/memory/decisions.md",

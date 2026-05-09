@@ -1,6 +1,6 @@
-# Agent Kit
+# Memsync
 
-Agent Kit is a repo-local compatibility layer for AI coding agents. It keeps shared memory, project instructions, and MCP tool definitions in one Git-synced `.agent/` directory, then renders the files that Codex, Claude Code, and Cursor already know how to read.
+Memsync is a repo-local compatibility layer for AI coding agents. It keeps shared memory, project instructions, and MCP tool definitions in one Git-synced `.agent/` directory, then renders the files that Codex, Claude Code, and Cursor already know how to read.
 
 The goal is simple: your project memory and tools should belong to the repository, not to one AI platform.
 
@@ -12,7 +12,7 @@ AI coding tools are useful, but each one stores project context differently:
 - Claude Code reads `CLAUDE.md` and supports project-scoped `.mcp.json`.
 - Cursor reads `.cursor/rules/*.mdc`, `AGENTS.md`, and `.cursor/mcp.json`.
 
-Agent Kit gives you one source of truth:
+Memsync gives you one source of truth:
 
 ```text
 .agent/
@@ -52,74 +52,74 @@ CLAUDE.md
 Create the layout:
 
 ```bash
-python3 agent_kit.py init
+python3 agentmem.py init
 ```
 
 Add a durable memory note:
 
 ```bash
-python3 agent_kit.py remember "This repo uses pnpm and requires Redis for API tests."
+python3 agentmem.py remember "This repo uses pnpm and requires Redis for API tests."
 ```
 
 Regenerate platform adapter files:
 
 ```bash
-python3 agent_kit.py build
+python3 agentmem.py build
 ```
 
 Check the setup:
 
 ```bash
-python3 agent_kit.py doctor
+python3 agentmem.py doctor
 ```
 
 ## Commands
 
 ```bash
-python3 agent_kit.py init
+python3 agentmem.py init
 ```
 
 Creates `.agent/`, default memory files, MCP registry, and generated platform adapters.
 
 ```bash
-python3 agent_kit.py remember "..."
+python3 agentmem.py remember "..."
 ```
 
 Appends a note to `.agent/memory/log/YYYY-MM-DD.md`, updates the memory index, and rebuilds generated files.
 
 ```bash
-python3 agent_kit.py build
+python3 agentmem.py build
 ```
 
 Renders all platform-specific files from `.agent/`.
 
 ```bash
-python3 agent_kit.py tool list
+python3 agentmem.py tool list
 ```
 
 Lists MCP servers in `.agent/tools/registry.json`.
 
 ```bash
-python3 agent_kit.py tool add context7 --command npx --arg -y --arg @upstash/context7-mcp
+python3 agentmem.py tool add context7 --command npx --arg -y --arg @upstash/context7-mcp
 ```
 
 Adds a stdio MCP server and regenerates client config.
 
 ```bash
-python3 agent_kit.py tool add figma --url https://mcp.figma.com/mcp --bearer-token-env-var FIGMA_OAUTH_TOKEN
+python3 agentmem.py tool add figma --url https://mcp.figma.com/mcp --bearer-token-env-var FIGMA_OAUTH_TOKEN
 ```
 
 Adds an HTTP MCP server that reads its bearer token from an environment variable.
 
 ```bash
-python3 agent_kit.py sync -m "Sync agent memory"
+python3 agentmem.py sync -m "Sync agent memory"
 ```
 
 Runs `build`, pulls with rebase, commits shared agent files, and pushes.
 
 ## MCP Tools
 
-Agent Kit includes a small MCP server at `.agent/tools/mcp_server.py`.
+Memsync includes a small MCP server at `.agent/tools/mcp_server.py`.
 
 It exposes:
 
@@ -141,16 +141,16 @@ Initialize a repository and push to GitHub:
 ```bash
 git init
 git add .
-git commit -m "Initial Agent Kit project"
+git commit -m "Initial Memsync project"
 git branch -M main
-git remote add origin https://github.com/YOUR_USER/agent-kit.git
+git remote add origin https://github.com/YOUR_USER/agentmem.git
 git push -u origin main
 ```
 
 After that, use:
 
 ```bash
-python3 agent_kit.py sync -m "Sync agent memory"
+python3 agentmem.py sync -m "Sync agent memory"
 ```
 
 ## Security
@@ -160,7 +160,7 @@ Do not commit secrets into `.agent/`.
 Use environment variable references instead:
 
 ```bash
-python3 agent_kit.py tool add internal-api \
+python3 agentmem.py tool add internal-api \
   --url https://example.com/mcp \
   --bearer-token-env-var INTERNAL_API_TOKEN
 ```
@@ -184,11 +184,11 @@ Planned improvements:
 Issues and pull requests are welcome. Before submitting changes, run:
 
 ```bash
-python3 agent_kit.py build
-python3 agent_kit.py doctor
+python3 agentmem.py build
+python3 agentmem.py doctor
 python3 - <<'PY'
 from pathlib import Path
-for path in ["agent_kit.py", ".agent/tools/mcp_server.py"]:
+for path in ["agentmem.py", ".agent/tools/mcp_server.py"]:
     compile(Path(path).read_text(), path, "exec")
     print(path, "ok")
 PY

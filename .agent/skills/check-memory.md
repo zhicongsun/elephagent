@@ -1,0 +1,22 @@
+# Check Memory
+
+Use this skill to check the health of the shared agent memory system.
+
+## When to invoke
+
+- The user says "check memory", "memory status", "check memory setup", "doctor", or similar
+- Something seems wrong with memory loading or generated files are missing
+
+## Steps
+
+1. Run `python3 agentmem.py doctor` in the project root
+2. Read the output and summarize:
+   - Which checks passed (`[ok]`)
+   - Which checks warned (`[warn]`) — explain what the warning means and how to fix it
+   - Which checks failed (`[fail]`) — tell the user exactly what to do
+3. If everything is OK, confirm the setup is healthy
+
+## Notes
+
+- `[warn]` items are non-blocking but worth fixing (e.g. missing Git remote, potential secret in env)
+- `[fail]` items mean something is broken and must be resolved before memory syncing works

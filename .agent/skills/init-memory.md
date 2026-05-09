@@ -1,0 +1,19 @@
+# Init Memory
+
+Use this skill to initialize the shared agent memory system in the current project.
+
+## When to invoke
+
+- The user says "initialize memory sharing", "set up agent memory", "init memory", or similar
+- The `.agent/` directory does not exist yet in the project
+
+## Steps
+
+1. Run `python3 agentmem.py init` in the project root
+2. Report which files were created
+3. Remind the user to commit `.agent/`, `CLAUDE.md`, `AGENTS.md`, and `.cursor/` to Git so teammates can share the memory
+
+## Notes
+
+- Safe to run multiple times; existing files are not overwritten unless `--force` is passed
+- If `.agent/` already exists, tell the user and skip

@@ -105,7 +105,7 @@ def append_memory(note: str, topic: str = "log") -> str:
         path.write_text(f"# {path.stem}\n\n", encoding="utf-8")
     with path.open("a", encoding="utf-8") as handle:
         handle.write(f"- {note.strip()}\n")
-    return f"Appended to {rel(path)}. Run `python3 agent_kit.py build` to refresh generated adapter files."
+    return f"Appended to {rel(path)}. Run `python3 agentmem.py build` to refresh generated adapter files."
 
 
 def read_registry() -> str:
@@ -217,7 +217,7 @@ def handle(message: dict[str, Any]) -> dict[str, Any] | None:
                 {
                     "protocolVersion": params.get("protocolVersion", "2024-11-05"),
                     "capabilities": {"tools": {}, "resources": {}},
-                    "serverInfo": {"name": "agent-kit", "version": SERVER_VERSION},
+                    "serverInfo": {"name": "agentmem", "version": SERVER_VERSION},
                 },
             )
         if method == "tools/list":

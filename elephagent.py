@@ -1017,17 +1017,6 @@ def sync_command(args: argparse.Namespace) -> int:
         ".mcp.json",
     ]
 
-    has_upstream = subprocess.run(
-        ["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"],
-        cwd=root,
-        capture_output=True,
-    ).returncode == 0
-
-    if has_upstream:
-        result = subprocess.run(["git", "pull", "--rebase"], cwd=root)
-        if result.returncode != 0:
-            return result.returncode
-
     result = subprocess.run(["git", "add", *tracked], cwd=root)
     if result.returncode != 0:
         return result.returncode
@@ -1037,6 +1026,17 @@ def sync_command(args: argparse.Namespace) -> int:
         print("No agent memory or tool changes to commit.")
     else:
         result = subprocess.run(["git", "commit", "-m", message], cwd=root)
+        if result.returncode != 0:
+            return result.returncode
+
+    has_upstream = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"],
+        cwd=root,
+        capture_output=True,
+    ).returncode == 0
+
+    if has_upstream:
+        result = subprocess.run(["git", "pull", "--rebase"], cwd=root)
         if result.returncode != 0:
             return result.returncode
 

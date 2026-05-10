@@ -8,6 +8,8 @@
 
 <p align="center">
   <a href="https://pypi.org/project/elephagent/"><img src="https://img.shields.io/pypi/v/elephagent.svg" alt="PyPI" /></a>
+  <a href="https://pypi.org/project/elephagent/"><img src="https://img.shields.io/pypi/dm/elephagent.svg" alt="Downloads" /></a>
+  <a href="https://github.com/zhicongsun/elephagent/stargazers"><img src="https://img.shields.io/github/stars/zhicongsun/elephagent.svg?style=social" alt="GitHub Stars" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.9+-blue.svg" alt="Python 3.9+" /></a>
   <img src="https://img.shields.io/badge/dependencies-none-brightgreen.svg" alt="No dependencies" />
@@ -20,6 +22,13 @@
 ## 问题
 
 你同时使用 Claude Code、Cursor、Codex。每个工具把项目记忆存在不同地方。换台机器、换个队友、接入新的 AI 工具——又要从头再来。
+
+| | 没有 elephagent | 有 elephagent |
+|---|---|---|
+| **记忆位置** | 分散在 `CLAUDE.md`、`.cursor/rules/`、`AGENTS.md` | 统一存储在 `.agent/`，自动同步到所有平台 |
+| **切换工具** | 每个 AI 助手都要从头教起 | 所有助手共享同一份记忆 |
+| **新队友加入** | 口口相传项目知识 | `git clone` 即拥有全部上下文 |
+| **MCP 服务** | 每个工具单独配置 | 注册一次，全平台可用 |
 
 ## 工作原理
 

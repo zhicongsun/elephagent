@@ -8,6 +8,8 @@
 
 <p align="center">
   <a href="https://pypi.org/project/elephagent/"><img src="https://img.shields.io/pypi/v/elephagent.svg" alt="PyPI" /></a>
+  <a href="https://pypi.org/project/elephagent/"><img src="https://img.shields.io/pypi/dm/elephagent.svg" alt="Downloads" /></a>
+  <a href="https://github.com/zhicongsun/elephagent/stargazers"><img src="https://img.shields.io/github/stars/zhicongsun/elephagent.svg?style=social" alt="GitHub Stars" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.9+-blue.svg" alt="Python 3.9+" /></a>
   <img src="https://img.shields.io/badge/dependencies-none-brightgreen.svg" alt="No dependencies" />
@@ -20,6 +22,13 @@ English | [中文](README.zh.md)
 ## The Problem
 
 You use Claude Code, Cursor, and Codex. Each stores project knowledge in a different place. Switch machines, add a teammate, or try a new agent — and you start from scratch.
+
+| | Without elephagent | With elephagent |
+|---|---|---|
+| **Memory location** | Scattered across `CLAUDE.md`, `.cursor/rules/`, `AGENTS.md` | One `.agent/` directory, auto-synced to all platforms |
+| **Switch tools** | Re-teach every agent from scratch | All agents share the same memory instantly |
+| **New teammate** | Copy-paste tribal knowledge | `git clone` and everything is there |
+| **MCP servers** | Configure separately in each tool | Register once, available everywhere |
 
 ## How It Works
 

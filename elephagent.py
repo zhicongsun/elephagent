@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Any
 
 
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 
 MEMORY_FILES = [
     ".agent/memory/index.md",
@@ -203,7 +203,7 @@ from pathlib import Path
 from typing import Any
 
 
-SERVER_VERSION = "0.1.1"
+SERVER_VERSION = "0.1.2"
 
 
 def find_root() -> Path:
@@ -605,6 +605,9 @@ def init_command(args: argparse.Namespace) -> int:
         created.append(".agent/tools/mcp_server.py")
     if write_if_missing(root / ".agent" / ".gitignore", "local/\n*.secret.*\n.env\n", args.force):
         created.append(".agent/.gitignore")
+    root_gitignore = ".claude/settings.local.json\n__pycache__/\n*.py[cod]\n.DS_Store\n"
+    if write_if_missing(root / ".gitignore", root_gitignore, args.force):
+        created.append(".gitignore")
     gitattributes_content = (
         "# Append-only memory files: keep all lines from both sides on conflict.\n"
         ".agent/memory/*.md merge=union\n"
@@ -1010,11 +1013,13 @@ def sync_command(args: argparse.Namespace) -> int:
     message = args.message or "Sync agent memory and tools"
     tracked = [
         ".agent",
-        "AGENTS.md",
-        "CLAUDE.md",
+        ".claude",
         ".cursor",
         ".codex",
         ".mcp.json",
+        ".gitattributes",
+        "AGENTS.md",
+        "CLAUDE.md",
     ]
 
     result = subprocess.run(["git", "add", *tracked], cwd=root)

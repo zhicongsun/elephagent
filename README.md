@@ -145,13 +145,30 @@ elephagent ships five skills that work across Claude Code, Cursor, and Codex —
 
 | Command | Description |
 |---|---|
-| `elephagent.py init` | Bootstrap `.agent/` and generate all platform files |
-| `elephagent.py remember "..."` | Append a note and rebuild |
-| `elephagent.py build` | Regenerate all adapter files from `.agent/` |
-| `elephagent.py doctor` | Check that everything is in sync |
-| `elephagent.py sync -m "msg"` | Build → pull → commit → push |
-| `elephagent.py tool list` | List registered MCP servers |
-| `elephagent.py tool add <name>` | Register a new MCP server |
+| `elephagent init` | Bootstrap `.agent/` and generate all platform files |
+| `elephagent remember "..."` | Append a note and rebuild |
+| `elephagent build` | Regenerate all adapter files from `.agent/` |
+| `elephagent import` | Import existing memories and skills from Claude Code, Cursor, or Codex |
+| `elephagent doctor` | Check that everything is in sync |
+| `elephagent sync -m "msg"` | Build → pull → commit → push |
+| `elephagent tool list` | List registered MCP servers |
+| `elephagent tool add <name>` | Register a new MCP server |
+
+### Importing from existing setups
+
+Already have a `CLAUDE.md`, `.cursor/rules/`, or custom skills? Import them in one command:
+
+```bash
+# Auto-detect and import everything
+elephagent import
+
+# Import from a specific platform
+elephagent import --from claude
+elephagent import --from cursor
+elephagent import --from codex
+```
+
+This scans for hand-written memories and custom skills, copies them into `.agent/`, and rebuilds all platform files so every agent can access them.
 
 ### Adding MCP tools
 
@@ -211,7 +228,7 @@ python3 elephagent.py tool add internal-api \
 - [x] Shared MCP tool registry
 - [x] Built-in skills for Claude Code, Cursor, Codex
 - [ ] Python SDK (`import elephagent`)
-- [ ] Importers for existing Claude / Cursor / Codex memories
+- [x] Importers for existing Claude / Cursor / Codex memories and skills
 - [ ] Memory compaction for large histories
 - [ ] `pipx` / Homebrew packaging
 - [ ] GitHub Action for CI validation

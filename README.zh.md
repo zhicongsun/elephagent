@@ -145,13 +145,30 @@ elephagent 内置了五个 skill，在 Claude Code、Cursor、Codex 中均可使
 
 | 命令 | 说明 |
 |---|---|
-| `elephagent.py init` | 初始化并生成所有平台文件 |
-| `elephagent.py remember "..."` | 记录一条笔记并重新生成 |
-| `elephagent.py build` | 从 `.agent/` 重新生成所有适配文件 |
-| `elephagent.py doctor` | 检查配置是否同步 |
-| `elephagent.py sync -m "msg"` | 构建 → 拉取 → 提交 → 推送 |
-| `elephagent.py tool list` | 列出已注册的 MCP 服务 |
-| `elephagent.py tool add <name>` | 注册新的 MCP 服务 |
+| `elephagent init` | 初始化并生成所有平台文件 |
+| `elephagent remember "..."` | 记录一条笔记并重新生成 |
+| `elephagent build` | 从 `.agent/` 重新生成所有适配文件 |
+| `elephagent import` | 从 Claude Code、Cursor、Codex 导入已有的记忆和 skills |
+| `elephagent doctor` | 检查配置是否同步 |
+| `elephagent sync -m "msg"` | 构建 → 拉取 → 提交 → 推送 |
+| `elephagent tool list` | 列出已注册的 MCP 服务 |
+| `elephagent tool add <name>` | 注册新的 MCP 服务 |
+
+### 从已有配置导入
+
+已经有 `CLAUDE.md`、`.cursor/rules/` 或自定义 skills？一条命令即可导入：
+
+```bash
+# 自动检测并导入所有平台的记忆和 skills
+elephagent import
+
+# 指定来源平台
+elephagent import --from claude
+elephagent import --from cursor
+elephagent import --from codex
+```
+
+会扫描手写的记忆文件和自定义 skills，导入到 `.agent/`，然后重新生成所有平台配置。
 
 ### 添加 MCP 工具
 
@@ -211,7 +228,7 @@ python3 elephagent.py tool add internal-api \
 - [x] 共享 MCP 工具注册表
 - [x] 内置 Skills（Claude Code、Cursor、Codex）
 - [ ] Python SDK（`import elephagent`）
-- [ ] 导入已有的 Claude / Cursor / Codex 记忆
+- [x] 导入已有的 Claude / Cursor / Codex 记忆和 skills
 - [ ] 大历史记忆压缩
 - [ ] `pipx` / Homebrew 打包发布
 - [ ] CI 验证用 GitHub Action

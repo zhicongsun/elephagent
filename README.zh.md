@@ -97,7 +97,7 @@ pipx install elephagent
 ### 方式 B — 命令行
 
 ```bash
-# 在项目中初始化
+# 在项目中初始化（如果还不是 Git 仓库会自动运行 `git init`）
 elephagent init
 
 # 记录一条记忆

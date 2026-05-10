@@ -588,6 +588,10 @@ Record project-specific terms here.
 
 def init_command(args: argparse.Namespace) -> int:
     root = find_root()
+    if not (root / ".git").exists():
+        print("No Git repository detected. Initializing one now...")
+        subprocess.run(["git", "init"], cwd=root, capture_output=True, check=True)
+        print("Git repository initialized.")
     (root / ".agent" / "tools").mkdir(parents=True, exist_ok=True)
     (root / ".cursor" / "rules").mkdir(parents=True, exist_ok=True)
     (root / ".codex").mkdir(parents=True, exist_ok=True)

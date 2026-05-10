@@ -97,7 +97,7 @@ If you use **Claude Code** or **Cursor**, you don't need to type any commands. J
 ### Option B — CLI
 
 ```bash
-# Initialize in your project
+# Initialize in your project (auto-runs `git init` if needed)
 elephagent init
 
 # Add a memory note

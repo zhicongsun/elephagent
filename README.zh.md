@@ -129,7 +129,7 @@ elephagent sync -m "更新记忆"
 
 ## 内置 Skills
 
-elephagent 内置了五个 skill，在 Claude Code、Cursor、Codex 中均可使用，无需输入命令。
+elephagent 内置了六个 skill，在 Claude Code、Cursor、Codex 中均可使用，无需输入命令。
 
 | Skill | 触发短语 | 功能 |
 |---|---|---|
@@ -138,6 +138,7 @@ elephagent 内置了五个 skill，在 Claude Code、Cursor、Codex 中均可使
 | `/check-memory` | "check memory"、"memory status"、"doctor" | 检查记忆系统健康状态 |
 | `/sync-memory` | "sync memory"、"push memory" | 构建 → 提交 → 推送到 Git |
 | `/add-skill` | "add skill \<名字\>" | 创建新的共享 skill |
+| `/import` | "import memories"、"import skills"、"import from cursor" | 从其他平台导入已有的记忆和 skills |
 
 ---
 

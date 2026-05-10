@@ -129,7 +129,7 @@ After running `elephagent init`, each platform picks up its config automatically
 
 ## Built-in Skills
 
-elephagent ships five skills that work across Claude Code, Cursor, and Codex — no commands needed.
+elephagent ships six skills that work across Claude Code, Cursor, and Codex — no commands needed.
 
 | Skill | Trigger phrases | What it does |
 |---|---|---|
@@ -138,6 +138,7 @@ elephagent ships five skills that work across Claude Code, Cursor, and Codex —
 | `/check-memory` | "check memory", "memory status", "doctor" | Health-check the memory setup |
 | `/sync-memory` | "sync memory", "push memory" | Build → commit → push to Git |
 | `/add-skill` | "add skill \<name\>" | Create a new shared skill |
+| `/import` | "import memories", "import skills", "import from cursor" | Import existing memories and skills from other platforms |
 
 ---
 

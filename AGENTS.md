@@ -40,7 +40,7 @@ Use this skill to create a new shared agent skill that will be available across 
 
 ## Notes
 
-- The skill name becomes the slash command in Claude Code (e.g. `add-skill` → `/add-skill`)
+- The skill name becomes the slash command in Claude Code (e.g. `my-tool` → `/my-tool`)
 - Use `--force` to overwrite an existing skill: `python3 elephagent.py skill add <name> --force`
 - After editing, always run `build` to keep Cursor and Codex in sync
 

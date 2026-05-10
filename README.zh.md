@@ -53,9 +53,9 @@ flowchart LR
     MCP --> codex
     MCP --> cursor
 
-    cc -->|"/remember"| src
-    cursor -->|"/remember"| src
-    codex -->|"/remember"| src
+    cc -->|"/el-remember"| src
+    cursor -->|"/el-remember"| src
+    codex -->|"/el-remember"| src
 ```
 
 ---
@@ -150,7 +150,7 @@ elephagent 内置了六个 skill，在 Claude Code、Cursor、Codex 中均可使
 | `elephagent init` | 初始化并生成所有平台文件 |
 | `elephagent remember "..."` | 记录一条笔记并重新生成 |
 | `elephagent build` | 从 `.agent/` 重新生成所有适配文件 |
-| `elephagent import` | 从 Claude Code、Cursor、Codex 导入已有的记忆和 skills |
+| `elephagent import` | 从其他平台导入记忆和 skills（支持 `--from`、`--path`、按名字导入） |
 | `elephagent doctor` | 检查配置是否同步 |
 | `elephagent sync -m "msg"` | 构建 → 拉取 → 提交 → 推送 |
 | `elephagent tool list` | 列出已注册的 MCP 服务 |
@@ -168,9 +168,21 @@ elephagent import
 elephagent import --from claude
 elephagent import --from cursor
 elephagent import --from codex
+
+# 按名字导入指定 skill（自动搜索 ~/.cursor/skills/ 和 ~/.claude/skills/）
+elephagent import my-skill another-skill
+
+# 从指定目录导入 skills
+elephagent import --path /path/to/skills
 ```
 
-会扫描手写的记忆文件和自定义 skills，导入到 `.agent/`，然后重新生成所有平台配置。
+**自动模式**下会扫描：
+- 项目内文件：`CLAUDE.md`、`.cursor/rules/`、`AGENTS.md`
+- 全局 skill 目录：`~/.cursor/skills/`、`~/.claude/skills/`
+
+只导入手写内容——`elephagent build` 生成的文件会自动跳过。`.agent/` 中已有的文件不会被覆盖。
+
+也可以在 Claude Code 或 Cursor 中直接使用 `/el-import` skill 代替命令行。
 
 ### 添加 MCP 工具
 

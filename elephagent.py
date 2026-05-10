@@ -916,6 +916,7 @@ def build_command(args: argparse.Namespace) -> int:
         "check-memory": "el-check-memory",
         "sync-memory": "el-sync-memory",
         "add-skill": "el-add-skill",
+        "import": "el-import",
     }
     skills_dir = root / SKILLS_DIR
     if skills_dir.exists():

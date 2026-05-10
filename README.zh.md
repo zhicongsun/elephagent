@@ -1,11 +1,17 @@
-# elephagent
+<p align="center">
+  <img src="assets/logo.png" width="200" alt="elephagent logo" />
+</p>
 
-> 一个目录，同步所有 AI 编程助手的记忆。
+<h1 align="center">elephagent</h1>
 
-[![PyPI](https://img.shields.io/pypi/v/elephagent.svg)](https://pypi.org/project/elephagent/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
-[![No dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg)]()
+<p align="center">一个目录，同步所有 AI 编程助手的记忆。</p>
+
+<p align="center">
+  <a href="https://pypi.org/project/elephagent/"><img src="https://img.shields.io/pypi/v/elephagent.svg" alt="PyPI" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.9+-blue.svg" alt="Python 3.9+" /></a>
+  <img src="https://img.shields.io/badge/dependencies-none-brightgreen.svg" alt="No dependencies" />
+</p>
 
 [English](README.md) | 中文
 

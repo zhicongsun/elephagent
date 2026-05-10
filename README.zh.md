@@ -4,7 +4,7 @@
 
 <h1 align="center">elephagent</h1>
 
-<p align="center">一个目录，同步所有 AI 编程助手的记忆。</p>
+<p align="center">一个目录，同步所有 AI 编程助手的记忆 —— <em>因为大象从不遗忘。</em></p>
 
 <p align="center">
   <a href="https://pypi.org/project/elephagent/"><img src="https://img.shields.io/pypi/v/elephagent.svg" alt="PyPI" /></a>

@@ -4,7 +4,7 @@
 
 <h1 align="center">elephagent</h1>
 
-<p align="center">One memory layer for all your AI coding agents.</p>
+<p align="center">One memory layer for all your AI coding agents — <em>because elephants never forget.</em></p>
 
 <p align="center">
   <a href="https://pypi.org/project/elephagent/"><img src="https://img.shields.io/pypi/v/elephagent.svg" alt="PyPI" /></a>

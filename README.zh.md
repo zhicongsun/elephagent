@@ -51,6 +51,10 @@ flowchart LR
 
 ---
 
+<p align="center">
+  <img src="assets/demo.gif" alt="elephagent demo" />
+</p>
+
 ## 安装
 
 ```bash
@@ -99,6 +103,18 @@ elephagent doctor
 # 提交并推送记忆到 Git
 elephagent sync -m "更新记忆"
 ```
+
+---
+
+## 平台配置
+
+运行 `elephagent init` 后，各平台会自动识别配置文件，仅 Cursor 需要一个额外步骤：
+
+| 平台 | 生成的文件 | 额外步骤 |
+|---|---|---|
+| **Claude Code** | `CLAUDE.md`, `.mcp.json` | 无需配置，开箱即用 |
+| **Cursor** | `.cursor/rules/`, `.cursor/mcp.json` | 用 Cursor 打开项目文件夹，会自动检测到 `agent-memory` MCP 服务。如有提示，在 **Settings → Cursor Settings → MCP** 中启用即可 |
+| **Codex** | `AGENTS.md`, `.codex/config.toml` | 无需配置，开箱即用 |
 
 ---
 

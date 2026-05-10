@@ -51,6 +51,10 @@ flowchart LR
 
 ---
 
+<p align="center">
+  <img src="assets/demo.gif" alt="elephagent demo" />
+</p>
+
 ## Installation
 
 ```bash
@@ -99,6 +103,18 @@ elephagent doctor
 # Commit and push memory to Git
 elephagent sync -m "update memory"
 ```
+
+---
+
+## Platform Setup
+
+After running `elephagent init`, each platform picks up its config automatically — with one exception:
+
+| Platform | Generated files | Extra steps |
+|---|---|---|
+| **Claude Code** | `CLAUDE.md`, `.mcp.json` | None — works out of the box |
+| **Cursor** | `.cursor/rules/`, `.cursor/mcp.json` | Open the project folder in Cursor — it auto-detects the `agent-memory` MCP server. Enable it in **Settings → Cursor Settings → MCP** if prompted |
+| **Codex** | `AGENTS.md`, `.codex/config.toml` | None — works out of the box |
 
 ---
 

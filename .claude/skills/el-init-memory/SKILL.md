@@ -1,5 +1,5 @@
 ---
-name: init-memory
+name: el-init-memory
 description: Init Memory
 ---
 

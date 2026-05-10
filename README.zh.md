@@ -87,12 +87,13 @@ pipx install elephagent
 | 你说什么 | 发生什么 |
 |---|---|
 | `init memory` | 初始化 `.agent/` 并生成所有平台文件 |
-| `/remember <内容>` | 把内容保存到共享记忆（用斜线命令） |
+| `/el-remember <内容>` | 把内容保存到共享记忆（用斜线命令） |
 | `sync memory` | 提交并推送记忆到 Git |
 | `check memory` | 检查记忆系统健康状态 |
 | `add skill <名字>` | 创建一个新的共享 skill |
+| `import memories` | 从其他平台导入已有的记忆和 skills |
 
-> **注意：** 保存记忆请使用 `/remember` 斜线命令，而非自然语言——"记下来"等短语可能被 AI 助手内置记忆系统拦截。
+> **注意：** 保存记忆请使用 `/el-remember` 斜线命令，而非自然语言——"记下来"等短语可能被 AI 助手内置记忆系统拦截。
 
 ### 方式 B — 命令行
 
@@ -133,12 +134,12 @@ elephagent 内置了六个 skill，在 Claude Code、Cursor、Codex 中均可使
 
 | Skill | 触发短语 | 功能 |
 |---|---|---|
-| `/init-memory` | "init memory"、"set up agent memory" | 初始化 `.agent/` 并生成平台文件 |
-| `/remember` | `/remember <内容>`（斜线命令） | 把内容保存到共享记忆 |
-| `/check-memory` | "check memory"、"memory status"、"doctor" | 检查记忆系统健康状态 |
-| `/sync-memory` | "sync memory"、"push memory" | 构建 → 提交 → 推送到 Git |
-| `/add-skill` | "add skill \<名字\>" | 创建新的共享 skill |
-| `/import` | "import memories"、"import skills"、"import from cursor" | 从其他平台导入已有的记忆和 skills |
+| `/el-init-memory` | "init memory"、"set up agent memory" | 初始化 `.agent/` 并生成平台文件 |
+| `/el-remember` | `/el-remember <内容>`（斜线命令） | 把内容保存到共享记忆 |
+| `/el-check-memory` | "check memory"、"memory status"、"doctor" | 检查记忆系统健康状态 |
+| `/el-sync-memory` | "sync memory"、"push memory" | 构建 → 提交 → 推送到 Git |
+| `/el-add-skill` | "add skill \<名字\>" | 创建新的共享 skill |
+| `/el-import` | "import memories"、"import skills"、"import from cursor" | 从其他平台导入已有的记忆和 skills |
 
 ---
 

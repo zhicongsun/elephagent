@@ -162,7 +162,7 @@ Use this skill to create a new shared agent skill available across Claude Code, 
 
 ## Notes
 
-- The skill name becomes the slash command in Claude Code (e.g. `add-skill` → `/add-skill`)
+- The skill name becomes the slash command in Claude Code (e.g. `my-tool` → `/my-tool`)
 - Use `--force` to overwrite an existing skill: `elephagent skill add <name> --force`
 - After editing, always run `build` to keep Cursor and Codex in sync
 """
@@ -200,12 +200,12 @@ Use this skill to import existing memories and skills from Claude Code, Cursor, 
 """
 
 DEFAULT_SKILLS: dict[str, str] = {
-    "init-memory": DEFAULT_INIT_MEMORY_SKILL,
-    "remember": DEFAULT_REMEMBER_SKILL,
-    "check-memory": DEFAULT_CHECK_MEMORY_SKILL,
-    "sync-memory": DEFAULT_SYNC_MEMORY_SKILL,
-    "add-skill": DEFAULT_ADD_SKILL_SKILL,
-    "import": DEFAULT_IMPORT_SKILL,
+    "el-init-memory": DEFAULT_INIT_MEMORY_SKILL,
+    "el-remember": DEFAULT_REMEMBER_SKILL,
+    "el-check-memory": DEFAULT_CHECK_MEMORY_SKILL,
+    "el-sync-memory": DEFAULT_SYNC_MEMORY_SKILL,
+    "el-add-skill": DEFAULT_ADD_SKILL_SKILL,
+    "el-import": DEFAULT_IMPORT_SKILL,
 }
 
 DEFAULT_MCP_SERVER = {
@@ -909,8 +909,33 @@ def build_command(args: argparse.Namespace) -> int:
             write_text(fallback, content)
             fallbacks.append((path_name, rel(root, fallback)))
 
-    skill_outputs: list[str] = []
+    # Migrate old skill names to el- prefix
+    _OLD_TO_NEW_SKILLS = {
+        "init-memory": "el-init-memory",
+        "remember": "el-remember",
+        "check-memory": "el-check-memory",
+        "sync-memory": "el-sync-memory",
+        "add-skill": "el-add-skill",
+    }
     skills_dir = root / SKILLS_DIR
+    if skills_dir.exists():
+        for old_name, new_name in _OLD_TO_NEW_SKILLS.items():
+            old_path = skills_dir / f"{old_name}.md"
+            new_path = skills_dir / f"{new_name}.md"
+            if old_path.exists():
+                if new_path.exists():
+                    old_path.unlink()
+                else:
+                    old_path.rename(new_path)
+                # Clean up old deployed files
+                old_claude = root / CLAUDE_SKILLS_DIR / old_name
+                if old_claude.exists():
+                    shutil.rmtree(old_claude)
+                old_cursor = root / CURSOR_SKILLS_DIR / f"{old_name}.mdc"
+                if old_cursor.exists():
+                    old_cursor.unlink()
+
+    skill_outputs: list[str] = []
     if skills_dir.exists():
         for skill_file in sorted(skills_dir.glob("*.md")):
             skill_name = skill_file.stem
@@ -981,7 +1006,7 @@ def skill_add_command(args: argparse.Namespace) -> int:
         print(f"Skill already exists: {rel(root, skill_path)}. Use --force to overwrite.", file=sys.stderr)
         return 1
 
-    if skill_name == "remember":
+    if skill_name == "el-remember":
         content = DEFAULT_REMEMBER_SKILL
     else:
         content = f"# {skill_name.capitalize()}\n\nDescribe when and how to use this skill.\n\n## Steps\n\n1. Step one\n2. Step two\n"

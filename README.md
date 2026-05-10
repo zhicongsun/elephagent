@@ -87,12 +87,13 @@ If you use **Claude Code** or **Cursor**, you don't need to type any commands. J
 | What you say | What happens |
 |---|---|
 | `init memory` | Sets up `.agent/` and generates all platform files |
-| `/remember <note>` | Saves a note to shared memory (use the slash command) |
+| `/el-remember <note>` | Saves a note to shared memory (use the slash command) |
 | `sync memory` | Commits and pushes memory to Git |
 | `check memory` | Runs a health check on the setup |
 | `add skill <name>` | Creates a new shared skill |
+| `import memories` | Imports existing memories and skills from other platforms |
 
-> **Note:** Use `/remember` as a slash command rather than natural language — phrases like "remember this" may be intercepted by the AI agent's built-in memory system.
+> **Note:** Use `/el-remember` as a slash command rather than natural language — phrases like "remember this" may be intercepted by the AI agent's built-in memory system.
 
 ### Option B — CLI
 
@@ -133,12 +134,12 @@ elephagent ships six skills that work across Claude Code, Cursor, and Codex — 
 
 | Skill | Trigger phrases | What it does |
 |---|---|---|
-| `/init-memory` | "init memory", "set up agent memory" | Bootstrap `.agent/` and generate platform files |
-| `/remember` | `/remember <note>` (slash command) | Save a note from the conversation to shared memory |
-| `/check-memory` | "check memory", "memory status", "doctor" | Health-check the memory setup |
-| `/sync-memory` | "sync memory", "push memory" | Build → commit → push to Git |
-| `/add-skill` | "add skill \<name\>" | Create a new shared skill |
-| `/import` | "import memories", "import skills", "import from cursor" | Import existing memories and skills from other platforms |
+| `/el-init-memory` | "init memory", "set up agent memory" | Bootstrap `.agent/` and generate platform files |
+| `/el-remember` | `/el-remember <note>` (slash command) | Save a note from the conversation to shared memory |
+| `/el-check-memory` | "check memory", "memory status", "doctor" | Health-check the memory setup |
+| `/el-sync-memory` | "sync memory", "push memory" | Build → commit → push to Git |
+| `/el-add-skill` | "add skill \<name\>" | Create a new shared skill |
+| `/el-import` | "import memories", "import skills", "import from cursor" | Import existing memories and skills from other platforms |
 
 ---
 

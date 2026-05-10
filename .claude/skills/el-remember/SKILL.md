@@ -1,5 +1,5 @@
 ---
-name: remember
+name: el-remember
 description: Remember
 ---
 

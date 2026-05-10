@@ -1,5 +1,5 @@
 ---
-name: sync-memory
+name: el-sync-memory
 description: Sync Memory
 ---
 

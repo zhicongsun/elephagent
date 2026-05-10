@@ -1,3 +1,8 @@
+---
+name: el-check-memory
+description: Check Memory
+---
+
 # Check Memory
 
 Use this skill to check the health of the shared agent memory system.

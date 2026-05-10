@@ -1,3 +1,8 @@
+---
+name: el-add-skill
+description: Add Skill
+---
+
 # Add Skill
 
 Use this skill to create a new shared agent skill that will be available across Claude Code, Cursor, and Codex.

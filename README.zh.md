@@ -87,6 +87,7 @@ pip install elephagent
 | `add skill <名字>` | 创建一个新的共享 skill |
 | `import memories` | 从其他平台导入已有的记忆和 skills |
 | `import skills` | 同上——两种说法都可以 |
+| `handoff` | 切换工具前，自动总结当前会话到共享记忆 |
 
 > **注意：** 保存记忆请使用 `/el-remember` 斜线命令，而非自然语言——"记下来"等短语可能被 AI 助手内置记忆系统拦截。
 
@@ -125,7 +126,7 @@ elephagent sync -m "更新记忆"
 
 ## 内置 Skills
 
-elephagent 内置了六个 skill，在 Claude Code、Cursor、Codex 中均可使用，无需输入命令。
+elephagent 内置了七个 skill，在 Claude Code、Cursor、Codex 中均可使用，无需输入命令。
 
 | Skill | 触发短语 | 功能 |
 |---|---|---|
@@ -135,6 +136,7 @@ elephagent 内置了六个 skill，在 Claude Code、Cursor、Codex 中均可使
 | `/el-sync-memory` | "sync memory"、"push memory" | 构建 → 提交 → 推送到 Git |
 | `/el-add-skill` | "add skill \<名字\>" | 创建新的共享 skill |
 | `/el-import` | "import memories"、"import skills"、"import from cursor" | 从其他平台导入已有的记忆和 skills |
+| `/el-handoff` | "handoff"、"switch to cursor"、"save context" | 切换工具前，自动总结当前会话到共享记忆 |
 
 ---
 

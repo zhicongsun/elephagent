@@ -1,0 +1,41 @@
+---
+name: el-handoff
+description: Handoff
+---
+
+# Handoff
+
+Summarize the current session and save it to shared memory so another AI agent can pick up where you left off.
+
+## When to invoke
+
+- The user says "handoff", "hand off", "switch to cursor", "switch to claude", "switch to codex", "save context", "wrap up session", or similar
+- The user is about to close this tool and continue in a different AI coding agent
+
+## Steps
+
+1. Review the current conversation and identify:
+   - **What was worked on**: files changed, features added, bugs fixed
+   - **Key decisions made**: architecture choices, trade-offs, rejected approaches
+   - **Current status**: what's done, what's in progress, what's blocked
+   - **Next steps**: what the user planned to do next
+2. Write a concise handoff note (keep it under 300 words) and save it:
+   ```bash
+   elephagent remember "## Handoff — <date>
+
+   **Worked on:** <summary>
+
+   **Decisions:** <key choices made>
+
+   **Status:** <what's done vs in-progress>
+
+   **Next steps:** <what to do next>"
+   ```
+3. Confirm to the user that the handoff note is saved and will be available in all agents
+
+## Notes
+
+- Focus on information that would be lost when switching tools — things not obvious from the code or git history
+- Don't include file contents or large code blocks — just summarize what changed and why
+- If there are uncommitted changes, mention that so the next agent knows to check `git diff`
+- The note is appended to `.agent/memory/log.md` and synced to all platforms on next build

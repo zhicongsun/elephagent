@@ -87,6 +87,7 @@ If you use **Claude Code** or **Cursor**, you don't need to type any commands. J
 | `add skill <name>` | Creates a new shared skill |
 | `import memories` | Imports existing memories and skills from other platforms |
 | `import skills` | Same as above — works with either phrasing |
+| `handoff` | Summarizes current session to shared memory before switching tools |
 
 > **Note:** Use `/el-remember` as a slash command rather than natural language — phrases like "remember this" may be intercepted by the AI agent's built-in memory system.
 
@@ -125,7 +126,7 @@ After running `elephagent init`, each platform picks up its config automatically
 
 ## Built-in Skills
 
-elephagent ships six skills that work across Claude Code, Cursor, and Codex — no commands needed.
+elephagent ships seven skills that work across Claude Code, Cursor, and Codex — no commands needed.
 
 | Skill | Trigger phrases | What it does |
 |---|---|---|
@@ -135,6 +136,7 @@ elephagent ships six skills that work across Claude Code, Cursor, and Codex — 
 | `/el-sync-memory` | "sync memory", "push memory" | Build → commit → push to Git |
 | `/el-add-skill` | "add skill \<name\>" | Create a new shared skill |
 | `/el-import` | "import memories", "import skills", "import from cursor" | Import existing memories and skills from other platforms |
+| `/el-handoff` | "handoff", "switch to cursor", "save context" | Summarize current session to shared memory before switching tools |
 
 ---
 

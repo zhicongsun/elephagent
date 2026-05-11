@@ -1,4 +1,4 @@
-Output assets/demo.gif
+Output assets/terminal.gif
 
 Set Shell "bash"
 Set FontSize 14
@@ -15,20 +15,16 @@ Sleep 500ms
 
 Type "pip install elephagent"
 Enter
-Sleep 2s
+Sleep 4s
 
 # Init in a project
 Type "# Initialize in your project"
 Enter
 Sleep 500ms
 
-Type "mkdir my-project && cd my-project"
+Type "cd $(mktemp -d) && elephagent init"
 Enter
-Sleep 600ms
-
-Type "elephagent init"
-Enter
-Sleep 2.5s
+Sleep 3s
 
 # Show structure
 Type "# What's inside .agent/"
@@ -54,6 +50,15 @@ Enter
 Sleep 500ms
 
 Type "elephagent doctor"
+Enter
+Sleep 2.5s
+
+# Import
+Type "# Import existing skills from other platforms"
+Enter
+Sleep 500ms
+
+Type "elephagent import"
 Enter
 Sleep 2.5s
 

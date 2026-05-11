@@ -70,12 +70,6 @@ flowchart LR
 pip install elephagent
 ```
 
-Or with pipx (recommended for global CLI tools):
-
-```bash
-pipx install elephagent
-```
-
 ---
 
 ## Quick Start
@@ -92,6 +86,7 @@ If you use **Claude Code** or **Cursor**, you don't need to type any commands. J
 | `check memory` | Runs a health check on the setup |
 | `add skill <name>` | Creates a new shared skill |
 | `import memories` | Imports existing memories and skills from other platforms |
+| `import skills` | Same as above — works with either phrasing |
 
 > **Note:** Use `/el-remember` as a slash command rather than natural language — phrases like "remember this" may be intercepted by the AI agent's built-in memory system.
 

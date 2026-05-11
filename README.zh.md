@@ -70,12 +70,6 @@ flowchart LR
 pip install elephagent
 ```
 
-或使用 pipx（推荐用于全局 CLI 工具）：
-
-```bash
-pipx install elephagent
-```
-
 ---
 
 ## 快速开始
@@ -92,6 +86,7 @@ pipx install elephagent
 | `check memory` | 检查记忆系统健康状态 |
 | `add skill <名字>` | 创建一个新的共享 skill |
 | `import memories` | 从其他平台导入已有的记忆和 skills |
+| `import skills` | 同上——两种说法都可以 |
 
 > **注意：** 保存记忆请使用 `/el-remember` 斜线命令，而非自然语言——"记下来"等短语可能被 AI 助手内置记忆系统拦截。
 

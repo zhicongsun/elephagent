@@ -30,39 +30,13 @@ You use Claude Code, Cursor, and Codex. Each stores project knowledge in a diffe
 | **New teammate** | Copy-paste tribal knowledge | `git clone` and everything is there |
 | **MCP servers** | Configure separately in each tool | Register once, available everywhere |
 
-## How It Works
-
 `elephagent` stores everything in one Git-synced `.agent/` directory and renders the config files each tool already knows how to read. Your AI agents can also read and write memory directly via a built-in MCP server.
 
-```mermaid
-flowchart LR
-    subgraph repo["Your Repository"]
-        direction TB
-        src[".agent/\n─────────────\nmemory/\n  decisions.md\n  workflows.md\n  pitfalls.md\ntools/\n  registry.json"]
-    end
-
-    src -->|"elephagent build"| CLAUDE["CLAUDE.md\n(Claude Code)"]
-    src -->|"elephagent build"| AGENTS["AGENTS.md\n(Codex)"]
-    src -->|"elephagent build"| CURSOR[".cursor/rules/\n(Cursor)"]
-    src -->|"elephagent build"| MCP[".mcp.json\n(all clients)"]
-
-    CLAUDE --> cc["Claude Code"]
-    AGENTS --> codex["Codex"]
-    CURSOR --> cursor["Cursor"]
-    MCP --> cc
-    MCP --> codex
-    MCP --> cursor
-
-    cc -->|"/el-remember"| src
-    cursor -->|"/el-remember"| src
-    codex -->|"/el-remember"| src
-```
+<p align="center">
+  <img src="assets/architecture.png" width="600" alt="elephagent architecture" />
+</p>
 
 ---
-
-<p align="center">
-  <img src="assets/demo.gif" alt="elephagent demo" />
-</p>
 
 ## Installation
 
@@ -109,6 +83,12 @@ elephagent doctor
 # Commit and push memory to Git
 elephagent sync -m "update memory"
 ```
+
+---
+
+<p align="center">
+  <img src="assets/demo.gif" alt="elephagent demo" />
+</p>
 
 ---
 

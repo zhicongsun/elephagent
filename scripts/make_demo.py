@@ -222,6 +222,62 @@ def combine_gifs(intro_path, terminal_path, output_path):
                        duration=all_durations, loop=0, optimize=True)
 
 if __name__ == "__main__":
+    import sys
+
+    if "--architecture-only" in sys.argv:
+        print("Generating architecture.png...")
+        # Build a clean static frame: logos + lines + tagline, no animated dots
+        frames = make_intro_frames()
+        # Reconstruct a clean final frame by redrawing without dots
+        from PIL import Image as _Img, ImageDraw as _Draw
+        frame = _Img.new("RGBA", (W, H), BG + (255,))
+        draw = _Draw.Draw(frame)
+
+        el_logo_raw = _Img.open("assets/logo.png").convert("RGBA")
+        el_logo_raw.thumbnail((120, 120), _Img.LANCZOS)
+        card_pad = 16
+        card_w = el_logo_raw.width + card_pad * 2
+        card_h = el_logo_raw.height + card_pad * 2
+        card = _Img.new("RGBA", (card_w, card_h), (0, 0, 0, 0))
+        cd = _Draw.Draw(card)
+        cd.rounded_rectangle([0, 0, card_w - 1, card_h - 1], radius=18, fill=(255, 255, 255, 255))
+        card.paste(el_logo_raw, (card_pad, card_pad), el_logo_raw)
+
+        el_cx, el_cy = W // 2, int(H * 0.30)
+        paste_centered(frame, card, el_cx, el_cy)
+        title_y = el_cy + card.height // 2 + 14
+        font_title = get_font(30)
+        font_label = get_font(14)
+        font_tag = get_font(15)
+        draw.text((el_cx, title_y), "elephagent", fill=TEXT_COLOR, font=font_title, anchor="mt")
+
+        tool_y = int(H * 0.68)
+        spacing = 200
+        tool_xs = [W // 2 - spacing, W // 2, W // 2 + spacing]
+        tool_data = [
+            (load_logo("assets/claude.webp", 56, make_circular=True), "Claude Code", tool_xs[0]),
+            (load_logo("assets/cursor.webp", 56, make_circular=True), "Cursor",      tool_xs[1]),
+            (load_logo("assets/codex.webp",  56, make_circular=True), "Codex",       tool_xs[2]),
+        ]
+        for logo, name, tcx in tool_data:
+            paste_centered(frame, logo, tcx, tool_y)
+            draw.text((tcx, tool_y + logo.height // 2 + 10), name, fill=TEXT_COLOR, font=font_label, anchor="mt")
+
+        arrow_top_y = title_y + 28
+        LINE_COLOR = (70, 70, 100)
+        for logo, _, tcx in tool_data:
+            ex = tcx
+            ey = tool_y - logo.height // 2 - 14
+            draw.line([(el_cx, arrow_top_y), (ex, ey)], fill=LINE_COLOR, width=2)
+
+        draw.text((W // 2, H - 40), "One memory layer for all your AI coding agents",
+                  fill=TEXT_COLOR, font=font_tag, anchor="mm")
+
+        frame.convert("RGB").save("assets/architecture.png")
+        import os
+        print(f"architecture.png: {os.path.getsize('assets/architecture.png') / 1024:.0f} KB")
+        sys.exit(0)
+
     print("Generating intro animation...")
     intro_frames = make_intro_frames()
     save_gif(intro_frames, "assets/intro.gif")

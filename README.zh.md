@@ -30,39 +30,13 @@
 | **新队友加入** | 口口相传项目知识 | `git clone` 即拥有全部上下文 |
 | **MCP 服务** | 每个工具单独配置 | 注册一次，全平台可用 |
 
-## 工作原理
-
 `elephagent` 把所有记忆存在一个 Git 同步的 `.agent/` 目录里，自动生成每个工具能读懂的配置文件。AI 助手还可以通过内置 MCP 服务直接读写记忆。
 
-```mermaid
-flowchart LR
-    subgraph repo["你的仓库"]
-        direction TB
-        src[".agent/\n─────────────\nmemory/\n  decisions.md\n  workflows.md\n  pitfalls.md\ntools/\n  registry.json"]
-    end
-
-    src -->|"elephagent build"| CLAUDE["CLAUDE.md\n(Claude Code)"]
-    src -->|"elephagent build"| AGENTS["AGENTS.md\n(Codex)"]
-    src -->|"elephagent build"| CURSOR[".cursor/rules/\n(Cursor)"]
-    src -->|"elephagent build"| MCP[".mcp.json\n(所有客户端)"]
-
-    CLAUDE --> cc["Claude Code"]
-    AGENTS --> codex["Codex"]
-    CURSOR --> cursor["Cursor"]
-    MCP --> cc
-    MCP --> codex
-    MCP --> cursor
-
-    cc -->|"/el-remember"| src
-    cursor -->|"/el-remember"| src
-    codex -->|"/el-remember"| src
-```
+<p align="center">
+  <img src="assets/architecture.png" width="600" alt="elephagent 架构图" />
+</p>
 
 ---
-
-<p align="center">
-  <img src="assets/demo.gif" alt="elephagent demo" />
-</p>
 
 ## 安装
 
@@ -109,6 +83,12 @@ elephagent doctor
 # 提交并推送记忆到 Git
 elephagent sync -m "更新记忆"
 ```
+
+---
+
+<p align="center">
+  <img src="assets/demo.gif" alt="elephagent 演示" />
+</p>
 
 ---
 

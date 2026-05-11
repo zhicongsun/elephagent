@@ -17,6 +17,10 @@
 
 [English](README.md) | 中文
 
+<p align="center">
+  <img src="assets/architecture.png" width="600" alt="elephagent 架构图" />
+</p>
+
 ---
 
 ## 问题
@@ -30,42 +34,63 @@
 | **新队友加入** | 口口相传项目知识 | `git clone` 即拥有全部上下文 |
 | **MCP 服务** | 每个工具单独配置 | 注册一次，全平台可用 |
 
-`elephagent` 把所有记忆存在一个 Git 同步的 `.agent/` 目录里，自动生成每个工具能读懂的配置文件。AI 助手还可以通过内置 MCP 服务直接读写记忆。
-
-<p align="center">
-  <img src="assets/architecture.png" width="600" alt="elephagent 架构图" />
-</p>
-
 ---
 
-## 安装
+## 工作原理
 
-```bash
-pip install elephagent
+`elephagent` 把所有记忆存在一个 Git 同步的 `.agent/` 目录里，自动生成每个工具能读懂的配置文件。AI 助手还可以通过内置 MCP 服务直接读写记忆。
+
+```mermaid
+flowchart LR
+    subgraph repo["你的仓库"]
+        direction TB
+        src[".agent/\n─────────────\nmemory/\n  decisions.md\n  workflows.md\n  pitfalls.md\ntools/\n  registry.json"]
+    end
+
+    src -->|"elephagent build"| CLAUDE["CLAUDE.md\n(Claude Code)"]
+    src -->|"elephagent build"| AGENTS["AGENTS.md\n(Codex)"]
+    src -->|"elephagent build"| CURSOR[".cursor/rules/\n(Cursor)"]
+    src -->|"elephagent build"| MCP[".mcp.json\n(所有客户端)"]
+
+    CLAUDE --> cc["Claude Code"]
+    AGENTS --> codex["Codex"]
+    CURSOR --> cursor["Cursor"]
+    MCP --> cc
+    MCP --> codex
+    MCP --> cursor
+
+    cc -->|"/el-remember"| src
+    cursor -->|"/el-remember"| src
+    codex -->|"/el-remember"| src
 ```
 
 ---
 
 ## 快速开始
 
-### 方式 A — 直接跟 AI 说话（推荐）
+### 1. 安装
 
-使用 **Claude Code** 或 **Cursor** 时，不需要敲任何命令，直接说：
+```bash
+pip install elephagent
+```
 
-| 你说什么 | 发生什么 |
+### 2. 跟 AI 说话（推荐）
+
+在 **Claude Code**、**Cursor** 或 **Codex** 中打开项目，使用以下命令：
+
+| 命令 | 发生什么 |
 |---|---|
-| `init memory` | 初始化 `.agent/` 并生成所有平台文件 |
-| `/el-remember <内容>` | 把内容保存到共享记忆（用斜线命令） |
-| `sync memory` | 提交并推送记忆到 Git |
-| `check memory` | 检查记忆系统健康状态 |
-| `add skill <名字>` | 创建一个新的共享 skill |
-| `import memories` | 从其他平台导入已有的记忆和 skills |
-| `import skills` | 同上——两种说法都可以 |
-| `handoff` | 切换工具前，自动总结当前会话到共享记忆 |
+| `/el-init-memory` | 初始化 `.agent/` 并生成所有平台文件 |
+| `/el-remember <内容>` | 把内容保存到共享记忆 |
+| `/el-import` | 从其他平台导入已有的记忆和 skills |
+| `/el-sync-memory` | 提交并推送记忆到 Git |
+| `/el-check-memory` | 检查记忆系统健康状态 |
+| `/el-handoff` | 切换工具前，自动总结当前会话到共享记忆 |
+| `/el-add-skill` | 创建一个新的共享 skill |
 
-> **注意：** 保存记忆请使用 `/el-remember` 斜线命令，而非自然语言——"记下来"等短语可能被 AI 助手内置记忆系统拦截。
+> **Cursor 提示：** 用 Cursor 打开项目文件夹，会自动检测到 `agent-memory` MCP 服务。如有提示，在 **Settings → Cursor Settings → MCP** 中启用即可。
 
-### 方式 B — 命令行
+### 3. 或者使用命令行
 
 ```bash
 # 在项目中初始化（如果还不是 Git 仓库会自动运行 `git init`）
@@ -74,8 +99,8 @@ elephagent init
 # 记录一条记忆
 elephagent remember "这个项目用 pnpm，API 测试需要 Redis。"
 
-# 重新生成所有适配文件
-elephagent build
+# 从其他平台导入已有的记忆和 skills
+elephagent import
 
 # 检查配置是否正确
 elephagent doctor
@@ -92,21 +117,9 @@ elephagent sync -m "更新记忆"
 
 ---
 
-## 平台配置
-
-运行 `elephagent init` 后，各平台会自动识别配置文件，仅 Cursor 需要一个额外步骤：
-
-| 平台 | 生成的文件 | 额外步骤 |
-|---|---|---|
-| **Claude Code** | `CLAUDE.md`, `.mcp.json` | 无需配置，开箱即用 |
-| **Cursor** | `.cursor/rules/`, `.cursor/mcp.json` | 用 Cursor 打开项目文件夹，会自动检测到 `agent-memory` MCP 服务。如有提示，在 **Settings → Cursor Settings → MCP** 中启用即可 |
-| **Codex** | `AGENTS.md`, `.codex/config.toml` | 无需配置，开箱即用 |
-
----
-
 ## 内置 Skills
 
-elephagent 内置了七个 skill，在 Claude Code、Cursor、Codex 中均可使用，无需输入命令。
+elephagent 内置了七个 skill，在 Claude Code、Cursor、Codex 中均可使用。
 
 | Skill | 触发短语 | 功能 |
 |---|---|---|
@@ -120,7 +133,7 @@ elephagent 内置了七个 skill，在 Claude Code、Cursor、Codex 中均可使
 
 ---
 
-## 完整命令列表
+## 命令行参考
 
 | 命令 | 说明 |
 |---|---|
@@ -159,16 +172,14 @@ elephagent import --path /path/to/skills
 
 只导入手写内容——`elephagent build` 生成的文件会自动跳过。`.agent/` 中已有的文件不会被覆盖。
 
-也可以在 Claude Code 或 Cursor 中直接使用 `/el-import` skill 代替命令行。
-
 ### 添加 MCP 工具
 
 ```bash
 # stdio 服务
-python3 elephagent.py tool add context7 --command npx --arg -y --arg @upstash/context7-mcp
+elephagent tool add context7 --command npx --arg -y --arg @upstash/context7-mcp
 
 # 从环境变量读取 token 的 HTTP 服务
-python3 elephagent.py tool add figma \
+elephagent tool add figma \
   --url https://mcp.figma.com/mcp \
   --bearer-token-env-var FIGMA_OAUTH_TOKEN
 ```
@@ -202,7 +213,7 @@ python3 elephagent.py tool add figma \
 永远不要把密钥写入 `.agent/`，请使用环境变量引用：
 
 ```bash
-python3 elephagent.py tool add internal-api \
+elephagent tool add internal-api \
   --url https://example.com/mcp \
   --bearer-token-env-var INTERNAL_API_TOKEN
 ```
@@ -218,8 +229,8 @@ python3 elephagent.py tool add internal-api \
 - [x] 内置 MCP 服务
 - [x] 共享 MCP 工具注册表
 - [x] 内置 Skills（Claude Code、Cursor、Codex）
-- [ ] Python SDK（`import elephagent`）
 - [x] 导入已有的 Claude / Cursor / Codex 记忆和 skills
+- [ ] Python SDK（`import elephagent`）
 - [ ] 大历史记忆压缩
 - [ ] `pipx` / Homebrew 打包发布
 - [ ] CI 验证用 GitHub Action
@@ -231,8 +242,8 @@ python3 elephagent.py tool add internal-api \
 欢迎提 Issue 和 PR。提交前请运行：
 
 ```bash
-python3 elephagent.py build
-python3 elephagent.py doctor
+elephagent build
+elephagent doctor
 python3 - <<'PY'
 from pathlib import Path
 for path in ["elephagent.py", ".agent/tools/mcp_server.py"]:

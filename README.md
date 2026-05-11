@@ -17,6 +17,10 @@
 
 English | [中文](README.zh.md)
 
+<p align="center">
+  <img src="assets/architecture.png" width="600" alt="elephagent architecture" />
+</p>
+
 ---
 
 ## The Problem
@@ -30,42 +34,63 @@ You use Claude Code, Cursor, and Codex. Each stores project knowledge in a diffe
 | **New teammate** | Copy-paste tribal knowledge | `git clone` and everything is there |
 | **MCP servers** | Configure separately in each tool | Register once, available everywhere |
 
+---
+
+## How It Works
+
 `elephagent` stores everything in one Git-synced `.agent/` directory and renders the config files each tool already knows how to read. Your AI agents can also read and write memory directly via a built-in MCP server.
 
-<p align="center">
-  <img src="assets/architecture.png" width="600" alt="elephagent architecture" />
-</p>
+```mermaid
+flowchart LR
+    subgraph repo["Your Repository"]
+        direction TB
+        src[".agent/\n─────────────\nmemory/\n  decisions.md\n  workflows.md\n  pitfalls.md\ntools/\n  registry.json"]
+    end
+
+    src -->|"elephagent build"| CLAUDE["CLAUDE.md\n(Claude Code)"]
+    src -->|"elephagent build"| AGENTS["AGENTS.md\n(Codex)"]
+    src -->|"elephagent build"| CURSOR[".cursor/rules/\n(Cursor)"]
+    src -->|"elephagent build"| MCP[".mcp.json\n(all clients)"]
+
+    CLAUDE --> cc["Claude Code"]
+    AGENTS --> codex["Codex"]
+    CURSOR --> cursor["Cursor"]
+    MCP --> cc
+    MCP --> codex
+    MCP --> cursor
+
+    cc -->|"/el-remember"| src
+    cursor -->|"/el-remember"| src
+    codex -->|"/el-remember"| src
+```
 
 ---
 
-## Installation
+## Getting Started
+
+### 1. Install
 
 ```bash
 pip install elephagent
 ```
 
----
+### 2. Talk to your AI agent (recommended)
 
-## Quick Start
+Open your project in **Claude Code**, **Cursor**, or **Codex** and use these commands:
 
-### Option A — Just talk to your AI agent (recommended)
-
-If you use **Claude Code** or **Cursor**, you don't need to type any commands. Just say:
-
-| What you say | What happens |
+| Command | What happens |
 |---|---|
-| `init memory` | Sets up `.agent/` and generates all platform files |
-| `/el-remember <note>` | Saves a note to shared memory (use the slash command) |
-| `sync memory` | Commits and pushes memory to Git |
-| `check memory` | Runs a health check on the setup |
-| `add skill <name>` | Creates a new shared skill |
-| `import memories` | Imports existing memories and skills from other platforms |
-| `import skills` | Same as above — works with either phrasing |
-| `handoff` | Summarizes current session to shared memory before switching tools |
+| `/el-init-memory` | Sets up `.agent/` and generates all platform files |
+| `/el-remember <note>` | Saves a note to shared memory |
+| `/el-import` | Imports existing memories and skills from other platforms |
+| `/el-sync-memory` | Commits and pushes memory to Git |
+| `/el-check-memory` | Runs a health check on the setup |
+| `/el-handoff` | Summarizes current session before switching tools |
+| `/el-add-skill` | Creates a new shared skill |
 
-> **Note:** Use `/el-remember` as a slash command rather than natural language — phrases like "remember this" may be intercepted by the AI agent's built-in memory system.
+> **Cursor note:** Open the project folder in Cursor — it auto-detects the `agent-memory` MCP server. Enable it in **Settings → Cursor Settings → MCP** if prompted.
 
-### Option B — CLI
+### 3. Or use the CLI
 
 ```bash
 # Initialize in your project (auto-runs `git init` if needed)
@@ -74,8 +99,8 @@ elephagent init
 # Add a memory note
 elephagent remember "This repo uses pnpm. Redis is required for API tests."
 
-# Rebuild all adapter files
-elephagent build
+# Import existing memories and skills from other platforms
+elephagent import
 
 # Verify the setup
 elephagent doctor
@@ -92,21 +117,9 @@ elephagent sync -m "update memory"
 
 ---
 
-## Platform Setup
-
-After running `elephagent init`, each platform picks up its config automatically — with one exception:
-
-| Platform | Generated files | Extra steps |
-|---|---|---|
-| **Claude Code** | `CLAUDE.md`, `.mcp.json` | None — works out of the box |
-| **Cursor** | `.cursor/rules/`, `.cursor/mcp.json` | Open the project folder in Cursor — it auto-detects the `agent-memory` MCP server. Enable it in **Settings → Cursor Settings → MCP** if prompted |
-| **Codex** | `AGENTS.md`, `.codex/config.toml` | None — works out of the box |
-
----
-
 ## Built-in Skills
 
-elephagent ships seven skills that work across Claude Code, Cursor, and Codex — no commands needed.
+elephagent ships seven skills that work across Claude Code, Cursor, and Codex.
 
 | Skill | Trigger phrases | What it does |
 |---|---|---|
@@ -120,14 +133,14 @@ elephagent ships seven skills that work across Claude Code, Cursor, and Codex �
 
 ---
 
-## All CLI Commands
+## CLI Reference
 
 | Command | Description |
 |---|---|
 | `elephagent init` | Bootstrap `.agent/` and generate all platform files |
 | `elephagent remember "..."` | Append a note and rebuild |
 | `elephagent build` | Regenerate all adapter files from `.agent/` |
-| `elephagent import` | Import memories and skills from other platforms (supports `--from`, `--path`, skill names) |
+| `elephagent import` | Import memories and skills (supports `--from`, `--path`, skill names) |
 | `elephagent doctor` | Check that everything is in sync |
 | `elephagent sync -m "msg"` | Build → pull → commit → push |
 | `elephagent tool list` | List registered MCP servers |
@@ -159,16 +172,14 @@ In **auto** mode, elephagent scans:
 
 Only hand-written content is imported — files generated by `elephagent build` are automatically skipped. Existing files in `.agent/` are never overwritten.
 
-You can also use the `/el-import` skill inside Claude Code or Cursor instead of the CLI.
-
 ### Adding MCP tools
 
 ```bash
 # stdio server
-python3 elephagent.py tool add context7 --command npx --arg -y --arg @upstash/context7-mcp
+elephagent tool add context7 --command npx --arg -y --arg @upstash/context7-mcp
 
 # HTTP server with token from env
-python3 elephagent.py tool add figma \
+elephagent tool add figma \
   --url https://mcp.figma.com/mcp \
   --bearer-token-env-var FIGMA_OAUTH_TOKEN
 ```
@@ -202,7 +213,7 @@ python3 elephagent.py tool add figma \
 Never commit secrets into `.agent/`. Use environment variable references instead:
 
 ```bash
-python3 elephagent.py tool add internal-api \
+elephagent tool add internal-api \
   --url https://example.com/mcp \
   --bearer-token-env-var INTERNAL_API_TOKEN
 ```
@@ -218,8 +229,8 @@ python3 elephagent.py tool add internal-api \
 - [x] Built-in MCP server
 - [x] Shared MCP tool registry
 - [x] Built-in skills for Claude Code, Cursor, Codex
-- [ ] Python SDK (`import elephagent`)
 - [x] Importers for existing Claude / Cursor / Codex memories and skills
+- [ ] Python SDK (`import elephagent`)
 - [ ] Memory compaction for large histories
 - [ ] `pipx` / Homebrew packaging
 - [ ] GitHub Action for CI validation
@@ -231,8 +242,8 @@ python3 elephagent.py tool add internal-api \
 Issues and PRs are welcome. Before submitting, run:
 
 ```bash
-python3 elephagent.py build
-python3 elephagent.py doctor
+elephagent build
+elephagent doctor
 python3 - <<'PY'
 from pathlib import Path
 for path in ["elephagent.py", ".agent/tools/mcp_server.py"]:

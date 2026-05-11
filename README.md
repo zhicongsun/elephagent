@@ -9,7 +9,6 @@
 <p align="center">
   <a href="https://pypi.org/project/elephagent/"><img src="https://img.shields.io/pypi/v/elephagent.svg" alt="PyPI" /></a>
   <a href="https://pypi.org/project/elephagent/"><img src="https://img.shields.io/pypi/dm/elephagent.svg" alt="Downloads" /></a>
-  <a href="https://github.com/zhicongsun/elephagent/stargazers"><img src="https://img.shields.io/github/stars/zhicongsun/elephagent.svg?style=social" alt="GitHub Stars" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" /></a>
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.9+-blue.svg" alt="Python 3.9+" /></a>
   <img src="https://img.shields.io/badge/dependencies-none-brightgreen.svg" alt="No dependencies" />

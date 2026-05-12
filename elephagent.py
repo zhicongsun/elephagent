@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Any
 
 
-VERSION = "0.3.1"
+VERSION = "0.3.2"
 
 MEMORY_FILES = [
     ".agent/memory/index.md",
@@ -276,7 +276,7 @@ from pathlib import Path
 from typing import Any
 
 
-SERVER_VERSION = "0.3.1"
+SERVER_VERSION = "0.3.2"
 
 
 def find_root() -> Path:

@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Any
 
 
-VERSION = "0.2.0"
+VERSION = "0.3.1"
 
 MEMORY_FILES = [
     ".agent/memory/index.md",
@@ -276,7 +276,7 @@ from pathlib import Path
 from typing import Any
 
 
-SERVER_VERSION = "0.2.0"
+SERVER_VERSION = "0.3.1"
 
 
 def find_root() -> Path:
@@ -1375,7 +1375,20 @@ def import_command(args: argparse.Namespace) -> int:
 def sync_command(args: argparse.Namespace) -> int:
     root = find_root()
     if not (root / ".git").exists():
-        print("This folder is not a Git repository. Run `git init` and add a remote before `elephagent.py sync`.", file=sys.stderr)
+        print("This folder is not a Git repository. Run `elephagent init` first.", file=sys.stderr)
+        return 1
+    has_remote = subprocess.run(
+        ["git", "remote"],
+        cwd=root,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    if not has_remote:
+        print(
+            "No remote configured. Create a repo at https://github.com/new (private recommended),\n"
+            "then run: git remote add origin https://github.com/you/your-repo.git",
+            file=sys.stderr,
+        )
         return 1
     build_command(args)
     message = args.message or "Sync agent memory and tools"

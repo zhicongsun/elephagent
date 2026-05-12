@@ -104,6 +104,10 @@ elephagent import
 # Verify the setup
 elephagent doctor
 
+# Before syncing, create a repo at https://github.com/new (private recommended),
+# then add it as the remote:
+# git remote add origin https://github.com/you/your-repo.git
+
 # Commit and push memory to Git
 elephagent sync -m "update memory"
 ```

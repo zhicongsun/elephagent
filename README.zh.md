@@ -104,6 +104,10 @@ elephagent import
 # 检查配置是否正确
 elephagent doctor
 
+# sync 之前，先在 https://github.com/new 创建一个仓库（建议设为 private），
+# 再配置 remote：
+# git remote add origin https://github.com/you/your-repo.git
+
 # 提交并推送记忆到 Git
 elephagent sync -m "更新记忆"
 ```

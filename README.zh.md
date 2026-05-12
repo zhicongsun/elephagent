@@ -89,6 +89,8 @@ pip install elephagent
 
 > **Cursor 提示：** 用 Cursor 打开项目文件夹，会自动检测到 `agent-memory` MCP 服务。如有提示，在 **Settings → Cursor Settings → MCP** 中启用即可。
 
+> **使用 `/el-sync-memory` 前：** 先在 https://github.com/new 创建仓库（建议设为 private），然后在项目目录里运行 `git remote add origin <url>`。
+
 ### 3. 或者使用命令行
 
 ```bash

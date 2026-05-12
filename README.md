@@ -89,6 +89,8 @@ Open your project in **Claude Code**, **Cursor**, or **Codex** and use these com
 
 > **Cursor note:** Open the project folder in Cursor — it auto-detects the `agent-memory` MCP server. Enable it in **Settings → Cursor Settings → MCP** if prompted.
 
+> **Before using `/el-sync-memory`:** Create a repo at https://github.com/new (private recommended) and run `git remote add origin <url>` in your project directory.
+
 ### 3. Or use the CLI
 
 ```bash
